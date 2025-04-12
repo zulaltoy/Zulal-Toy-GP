@@ -1,0 +1,71 @@
+%==============================================================================
+% Sjabloon onderzoeksvoorstel bachproef
+%==============================================================================
+% Gebaseerd op document class `hogent-article'
+% zie <https://github.com/HoGentTIN/latex-hogent-article>
+
+% Voor een voorstel in het Engels: voeg de documentclass-optie [english] toe.
+% Let op: kan enkel na toestemming van de graduaatsproefcoördinator!
+
+\documentclass{hogent-article}
+
+% Invoegen bibliografiebestand
+\addbibresource{voorstel.bib}
+
+% Informatie over de opleiding, het vak en soort opdracht
+\studyprogramme{Graduaat in het Programmeren}
+\course{Graduaatsproef}
+\assignmenttype{Onderzoeksvoorstel}
+% Voor een voorstel in het Engels, haal de volgende 3 regels uit commentaar
+% \studyprogramme{Associate Degree in Programming}
+% \course{Associate thesis}
+% \assignmenttype{Research proposal}
+
+\academicyear{2024-2025} % TODO: pas het academiejaar aan
+
+% TODO: Werktitel
+\title{E-commerce Applicatie met Java Spring Boot en React}
+
+% TODO: Studentnaam en emailadres invullen
+\author{Zülal Toy}
+\email{zulal.toy@student.hogent.be}
+
+% TODO: Medestudent
+% Gaat het om een graduaatsproef in samenwerking met een student in een andere
+% opleiding? Geef dan de naam en emailadres hier
+% \author{Yasmine Alaoui (naam opleiding)}
+% \email{yasmine.alaoui@student.hogent.be}
+
+% TODO: Geef de co-promotor op
+%\supervisor[Co-promotor]{S. Beekman (Synalco, \href{mailto:sigrid.beekman@synalco.be}\
+%{sigrid.beekman@synalco.be})}
+
+% Binnen welke specialisatierichting uit 3TI situeert dit onderzoek zich?
+% Kies uit deze lijst:
+%
+% - Mobile \& Enterprise development
+% - AI \& Data Engineering
+% - Functional \& Business Analysis
+% - System \& Network Administrator
+% - Mainframe Expert
+% - Als het onderzoek niet past binnen een van deze domeinen specifieer je deze
+%   zelf
+%
+\specialisation{Mobile \& Enterprise development}
+\keywords{Java, Spring Boot, React, E-commerce, Web Development}
+
+\begin{document}
+
+\begin{abstract}
+  Dit onderzoeksvoorstel beschrijft de ontwikkeling van een full-stack e-commerce applicatie met Java Spring Boot en React. De applicatie biedt gebruikersauthenticatie, productbeheer, een winkelwagentje, betalingen en een beheerderspaneel. Het onderzoek richt zich op het toepassen van moderne webtechnologieën en best practices in softwareontwikkeling. 
+\end{abstract}
+
+\tableofcontents
+
+% De hoofdtekst van het voorstel zit in een apart bestand, zodat het makkelijk
+% kan opgenomen worden in de bijlagen van de graduaatsproef zelf.
+\input{voorstel-inhoud}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
