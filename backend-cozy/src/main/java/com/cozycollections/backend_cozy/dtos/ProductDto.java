@@ -1,11 +1,13 @@
-package com.cozycollections.backend_cozy.request;
+package com.cozycollections.backend_cozy.dtos;
 
 import com.cozycollections.backend_cozy.model.Category;
+import com.cozycollections.backend_cozy.model.Image;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 @Data
-public class AddProductRequest {
+public class ProductDto {
     private Long id;
     private String name;
     private String description;
@@ -24,5 +26,6 @@ public class AddProductRequest {
     private Double weight;
     private String weightUnit;
     private Category category;
+    private List<ImageDto> images;
 
 }

@@ -1,5 +1,6 @@
 package com.cozycollections.backend_cozy.service;
 
+import com.cozycollections.backend_cozy.dtos.ProductDto;
 import com.cozycollections.backend_cozy.model.Product;
 import com.cozycollections.backend_cozy.request.AddProductRequest;
 import com.cozycollections.backend_cozy.request.ProductUpdateRequest;
@@ -15,6 +16,10 @@ public interface IProductService {
     List<Product> getProductsByName(String name);
     Product getProductById(Long productId);
     void deleteProductById(Long productId);
-    Product addProduct(AddProductRequest product);
-    Product updateProduct(ProductUpdateRequest product, Long productId);
+    Product addProduct(AddProductRequest productRequest);
+    Product updateProduct(ProductUpdateRequest productRequest, Long productId);
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
+    ProductDto convertToDto(Product product);
 }

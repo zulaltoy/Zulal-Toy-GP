@@ -60,4 +60,5 @@ public class Product {
         this.category = category;
         this.weightUnit = weightUnit;
     }
+
 }
