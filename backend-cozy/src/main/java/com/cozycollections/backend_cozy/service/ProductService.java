@@ -6,6 +6,7 @@ import com.cozycollections.backend_cozy.model.*;
 import com.cozycollections.backend_cozy.repository.*;
 import com.cozycollections.backend_cozy.request.AddProductRequest;
 import com.cozycollections.backend_cozy.request.ProductUpdateRequest;
+import com.cozycollections.backend_cozy.service.Interfaces.IProductService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

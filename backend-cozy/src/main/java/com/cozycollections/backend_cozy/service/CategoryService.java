@@ -2,6 +2,7 @@ package com.cozycollections.backend_cozy.service;
 
 import com.cozycollections.backend_cozy.model.Category;
 import com.cozycollections.backend_cozy.repository.CategoryRepository;
+import com.cozycollections.backend_cozy.service.Interfaces.ICategoryService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

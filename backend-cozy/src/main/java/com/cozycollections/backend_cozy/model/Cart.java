@@ -45,4 +45,15 @@ public class Cart {
             return unitPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
         }).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public void clearCart() {
+        this.cartItems.clear();
+        updateTotalAmount();
+    }
+
+    public void addItem(CartItem cartItem) {
+        this.cartItems.add(cartItem);
+        cartItem.setCart(this);
+        updateTotalAmount();
+    }
 }

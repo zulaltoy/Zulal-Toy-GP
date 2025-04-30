@@ -1,4 +1,4 @@
-package com.cozycollections.backend_cozy.service;
+package com.cozycollections.backend_cozy.service.Interfaces;
 
 import com.cozycollections.backend_cozy.dtos.ProductDto;
 import com.cozycollections.backend_cozy.model.Product;
