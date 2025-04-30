@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
@@ -58,7 +59,8 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getProductById(Long productId) {
-        return productRepository.findById(productId).orElseThrow(()->new EntityNotFoundException("Product not found"));
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
 
     @Override
@@ -89,24 +91,25 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest productRequest) {
-        if(productExists(productRequest.getName(),productRequest.getBrand())){
-            throw new EntityExistsException(productRequest.getName()+"Product already exists");
+        if (productExists(productRequest.getName(), productRequest.getBrand())) {
+            throw new EntityExistsException(productRequest.getName() + "Product already exists");
         }
         Category category = Optional.ofNullable(categoryRepository.findByName(productRequest.getCategory().getName()))
-                .orElseGet(()->{
+                .orElseGet(() -> {
                     Category newCategory = new Category(productRequest.getCategory().getName());
                     return categoryRepository.save(newCategory);
                 });
         productRequest.setCategory(category);
-        return productRepository.save(createProduct(productRequest,category));
+        return productRepository.save(createProduct(productRequest, category));
 
     }
+
     private boolean productExists(String name, String brand) {
         return productRepository.existsByNameAndBrand(name, brand);
     }
 
     public Product createProduct(AddProductRequest productRequest, Category category) {
-        return  new Product(
+        return new Product(
                 productRequest.getName(),
                 productRequest.getDescription(),
                 productRequest.getPrice(),
@@ -132,10 +135,11 @@ public class ProductService implements IProductService {
     @Override
     public Product updateProduct(ProductUpdateRequest productRequest, Long productId) {
         return productRepository.findById(productId)
-                .map(existingProduct->updateExistingProduct(existingProduct,productRequest))
+                .map(existingProduct -> updateExistingProduct(existingProduct, productRequest))
                 .map(productRepository::save)
-                .orElseThrow(()->new EntityNotFoundException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
+
     private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest productUpdateRequest) {
         existingProduct.setName(productUpdateRequest.getName());
         existingProduct.setDescription(productUpdateRequest.getDescription());
@@ -149,25 +153,26 @@ public class ProductService implements IProductService {
         existingProduct.setHeight(productUpdateRequest.getHeight());
         existingProduct.setWeight(productUpdateRequest.getWeight());
         existingProduct.setWeightUnit(productUpdateRequest.getWeightUnit());
-        Category category =categoryRepository.findByName(productUpdateRequest.getCategory().getName());
+        Category category = categoryRepository.findByName(productUpdateRequest.getCategory().getName());
         existingProduct.setCategory(category);
         return productRepository.save(existingProduct);
     }
+
     @Override
     public List<ProductDto> getConvertedProducts(List<Product> products) {
-        return products.stream().map(this::convertToDto).toList();
+        return products.stream().map(this::convertProductToDto).toList();
     }
 
     @Override
-    public ProductDto convertToDto(Product product) {
+    public ProductDto convertProductToDto(Product product) {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         List<Image> images = imageRepository.findImagesByProductId(product.getId());
 
         List<ImageDto> imageDtos = images.stream()
                 .map(image -> modelMapper.map(image, ImageDto.class))
-                    .toList();
-                productDto.setImages(imageDtos);
-                return productDto;
+                .toList();
+        productDto.setImages(imageDtos);
+        return productDto;
 
     }
 
