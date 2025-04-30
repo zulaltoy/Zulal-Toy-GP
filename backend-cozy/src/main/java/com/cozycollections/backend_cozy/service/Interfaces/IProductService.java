@@ -9,17 +9,26 @@ import java.util.List;
 
 public interface IProductService {
     List<Product> getAllProducts();
+
     List<Product> getProductsByCategoryAndBrand(String category, String brand);
+
     List<Product> getProductsByCategory(String category);
+
     List<Product> getProductsByBrandAndName(String brand, String name);
+
     List<Product> getProductsByBrand(String brand);
+
     List<Product> getProductsByName(String name);
+
     Product getProductById(Long productId);
+
     void deleteProductById(Long productId);
+
     Product addProduct(AddProductRequest productRequest);
+
     Product updateProduct(ProductUpdateRequest productRequest, Long productId);
 
     List<ProductDto> getConvertedProducts(List<Product> products);
 
-    ProductDto convertToDto(Product product);
+    ProductDto convertProductToDto(Product product);
 }
