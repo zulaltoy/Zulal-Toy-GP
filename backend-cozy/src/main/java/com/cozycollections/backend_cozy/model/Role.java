@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ManyToAny;
+
 
 import java.util.Collection;
 import java.util.HashSet;
+
 @Entity
 @Getter
 @Setter

@@ -1,7 +1,6 @@
 package com.cozycollections.backend_cozy.dtos;
 
 import com.cozycollections.backend_cozy.model.Category;
-import com.cozycollections.backend_cozy.model.Image;
 import lombok.Data;
 
 import java.math.BigDecimal;

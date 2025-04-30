@@ -1,4 +1,4 @@
-package com.cozycollections.backend_cozy.service;
+package com.cozycollections.backend_cozy.service.Interfaces;
 
 import com.cozycollections.backend_cozy.dtos.ImageDto;
 import com.cozycollections.backend_cozy.model.Image;

@@ -4,7 +4,7 @@ import com.cozycollections.backend_cozy.dtos.ImageDto;
 import com.cozycollections.backend_cozy.model.Image;
 import com.cozycollections.backend_cozy.model.Product;
 import com.cozycollections.backend_cozy.repository.ImageRepository;
-import com.cozycollections.backend_cozy.repository.ProductRepository;
+import com.cozycollections.backend_cozy.service.Interfaces.IImageService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
