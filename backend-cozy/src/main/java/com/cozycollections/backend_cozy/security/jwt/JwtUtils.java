@@ -1,6 +1,8 @@
 package com.cozycollections.backend_cozy.security.jwt;
 
-import com.cozycollections.backend_cozy.security.user.ShopUserDetails;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,10 +14,12 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
 
+import java.lang.reflect.Type;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
-
+import java.util.stream.Collectors;
+//JWT üretmek, doğrulamak ve içinden veri çekmek için yardımcı sınıf.
 @Component
 public class JwtUtils {
     @Value("${auth.token.jwtSecret}")
@@ -24,40 +28,35 @@ public class JwtUtils {
     @Value("${auth.token.accessExpirationInMils}")
     private String expirationTime;
 
-    @Value("${auth.token.refreshExpirationInMils}")
-    private String refreshExpirationTime;
 
     public String gerenateAccessTokenForUser(Authentication authentication) {
-        ShopUserDetails userPrincipal = (ShopUserDetails) authentication.getPrincipal();
+        String email = authentication.getName();
 
-        List<String> roles = userPrincipal.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority).toList();
+        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getEmail())
-                .claim("id",userPrincipal.getId())
+                .setSubject(email)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(calculateExpirationTime(expirationTime))
-                .signWith(key(), SignatureAlgorithm.HS256).compact();
+                .signWith(getSignedKey(), SignatureAlgorithm.HS256)
+                .compact(); //Token'ı string'e çevirir.
+
+
     }
 
     private Date calculateExpirationTime(String expirationTime) {
         Long expirationTimeLong = Long.parseLong(expirationTime);
         return new Date(System.currentTimeMillis() + expirationTimeLong);
     }
-    private Key key() {return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));}
 
-    public String generateRefreshToken(String email) {
-        return Jwts.builder()
-                .setSubject(email).setIssuedAt(new Date())
-                .setExpiration(calculateExpirationTime(refreshExpirationTime))
-                .signWith(key(),SignatureAlgorithm.HS256).compact();
+    private Key getSignedKey() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)); //Şifrelenmiş anahtarı çözerek Key nesnesi üretir.
     }
 
     public String getUserNameFromToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key())
+                .setSigningKey(getSignedKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody().getSubject();
@@ -66,13 +65,24 @@ public class JwtUtils {
     public boolean validateToken(String token) {
         try{
             Jwts.parserBuilder()
-                    .setSigningKey(key())
+                    .setSigningKey(getSignedKey())
                     .build()
                     .parseClaimsJws(token);
             return true;
         }catch (JwtException e){
             throw new JwtException(e.getMessage());
         }
+    }
+    public List<String> getRolesFromToken(String token) {
+       Object rolesObj = Jwts.parserBuilder()
+                .setSigningKey(getSignedKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("roles");
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(rolesObj,new TypeReference<List<String>>() {});
     }
 
 
