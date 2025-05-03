@@ -13,9 +13,9 @@ import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.Map;
-
+//JWT hatası oluştuğunda ne yapılacağını belirleyen sınıf.
 @Component
-public class JwtEntryPoint implements AuthenticationEntryPoint {
+public class JwtEntryPoint implements AuthenticationEntryPoint { //Spring Security'de yetkisiz erişimler olduğunda tetiklenir.
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,

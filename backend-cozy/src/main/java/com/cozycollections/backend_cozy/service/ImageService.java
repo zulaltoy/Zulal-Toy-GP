@@ -27,13 +27,13 @@ public class ImageService implements IImageService {
     }
 
     @Override
-    public void updateImage(MultipartFile file, Long id) {
+    public void updateImage(MultipartFile file, Long id) { //MultipartFile: Gelen resim dosyasıdır.
         Image image = getImageById(id);
         try {
             image.setFileName(file.getOriginalFilename());
             image.setFileType(file.getContentType());
-            image.setImage(new SerialBlob(file.getBytes()));
-            imageRepository.save(image);
+            image.setImage(new SerialBlob(file.getBytes()));// resmi byte array olarak alır ve BLOB'a çevirir.SerialBlob: Java’da dosyayı veritabanında saklanabilir hale getirir.
+            imageRepository.save(image); // veritabanına kaydeder
 
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -42,30 +42,36 @@ public class ImageService implements IImageService {
 
     @Override
     public void deleteImage(Long id) {
-      imageRepository.findById(id).ifPresentOrElse(imageRepository::delete,()->{
+      imageRepository.findById(id).ifPresentOrElse(imageRepository::delete,()->{   //ID’ye göre resmi arar. Varsa siler. Yoksa hata verir.
+
           throw new EntityNotFoundException("Image not found");
       });
     }
 
     @Override
     public List<ImageDto> saveImages(Long productId, List<MultipartFile> files) {
-        Product product = productService.getProductById(productId);
+        Product product = productService.getProductById(productId);    //Ürünü bulur ve kayıt edilen resimleri listeleyeceği boş bir liste oluşturur.
         List<ImageDto> savedImages = new ArrayList<>();
 
-        for(MultipartFile file : files){
+        for(MultipartFile file : files){ //Bu satır, gelen resim dosyalarını tek tek döngüye sokar ve her resim için işlemi yapar.
             try{
                 Image image= new Image();
                 image.setFileName(file.getOriginalFilename());
                 image.setFileType(file.getContentType());
-                image.setImage(new SerialBlob(file.getBytes()));
-                image.setProduct(product);
+                image.setImage(new SerialBlob(file.getBytes())); // // içeriği byte olarak al
+                image.setProduct(product); // resim hangi ürüne ait
+
 
                 String rawDownloadUrl="/api/v1/images/image/download/";
-                String downloadUrl= rawDownloadUrl + image.getId();
+                String downloadUrl= rawDownloadUrl + image.getId();  //Burada, image.getId() eklenerek tam indirilebilir URL oluşturuluyor. Yani, her resmin ID'si eklendikçe her birinin indirilme linki farklı olacaktır.
                 image.setDownloadUrl(downloadUrl);
-                Image savedImage = imageRepository.save(image);
-                savedImage.setDownloadUrl(rawDownloadUrl + savedImage.getId());
-                imageRepository.save(savedImage);
+
+                Image savedImage = imageRepository.save(image); //Resmi veritabanına kaydeder. Bu, resmi veritabanında oluşturur ve ID’sini otomatik olarak atar.
+                savedImage.setDownloadUrl(rawDownloadUrl + savedImage.getId()); //Veritabanına kaydettikten sonra, kaydedilen resmin URL'sini günceller.
+                imageRepository.save(savedImage);  //URL’yi ekledikten sonra resmi tekrar veritabanına kaydederiz.
+
+                //İki kere save() yapmak: İlk kayıtta resmin verileri kaydedilir, ID oluşturulmaz.
+                // İkinci kayıtta ise ID oluşturulduktan sonra downloadUrl eklenip kaydedilir.
 
                 ImageDto imageDto = new ImageDto();
                 imageDto.setId(savedImage.getId());
