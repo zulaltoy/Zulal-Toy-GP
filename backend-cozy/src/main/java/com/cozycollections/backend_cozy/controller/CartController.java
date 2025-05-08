@@ -26,9 +26,9 @@ public class CartController {
     }
 
     @DeleteMapping("/cart/{userId}/clear")
-    public ResponseEntity<ApiResponse> clearCart(@PathVariable Long cartId) {
+    public void clearCart(@PathVariable Long cartId) {
         cartService.deleteCartByCartId(cartId);
-        return ResponseEntity.ok(new ApiResponse("Cart cleared successfully", null));
+
     }
 
 }

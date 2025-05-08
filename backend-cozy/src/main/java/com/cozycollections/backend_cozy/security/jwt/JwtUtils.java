@@ -1,6 +1,7 @@
 package com.cozycollections.backend_cozy.security.jwt;
 
 
+import com.cozycollections.backend_cozy.security.userDetail.ShopUserDetails;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
@@ -14,11 +15,10 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
 
-import java.lang.reflect.Type;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+
 //JWT üretmek, doğrulamak ve içinden veri çekmek için yardımcı sınıf.
 @Component
 public class JwtUtils {
@@ -28,14 +28,22 @@ public class JwtUtils {
     @Value("${auth.token.accessExpirationInMils}")
     private String expirationTime;
 
+    @Value("${auth.token.refreshExpirationInMils}")
+    private String refreshExpirationTime;
 
-    public String gerenateAccessTokenForUser(Authentication authentication) {
-        String email = authentication.getName();
 
-        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+    public String generateAccessTokenForUser(Authentication authentication) {
+        ShopUserDetails userPrincipals = (ShopUserDetails) authentication.getPrincipal();
+
+       List<String> roles = userPrincipals.getAuthorities()
+               .stream()
+               .map(GrantedAuthority::getAuthority).toList();
+
+
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(userPrincipals.getEmail())
+                .claim("id", userPrincipals.getId())
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(calculateExpirationTime(expirationTime))
@@ -43,6 +51,15 @@ public class JwtUtils {
                 .compact(); //Token'ı string'e çevirir.
 
 
+    }
+
+    public String generateRefreshToken(String email) {
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(calculateExpirationTime(refreshExpirationTime))
+                .signWith(getSignedKey(),SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private Date calculateExpirationTime(String expirationTime) {
@@ -70,19 +87,11 @@ public class JwtUtils {
                     .parseClaimsJws(token);
             return true;
         }catch (JwtException e){
-            throw new JwtException(e.getMessage());
-        }
-    }
-    public List<String> getRolesFromToken(String token) {
-       Object rolesObj = Jwts.parserBuilder()
-                .setSigningKey(getSignedKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("roles");
+            //throw new JwtException(e.getMessage());
+            System.out.println("Invalid JWT token: " + e.getMessage());
 
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.convertValue(rolesObj,new TypeReference<List<String>>() {});
+            return false;
+        }
     }
 
 

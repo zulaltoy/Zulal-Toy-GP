@@ -19,21 +19,21 @@ public class UserController {
     @GetMapping("/user/{userId}/user")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId)  {
         User user = userService.getUserById(userId);
-        UserDto userDto = userService.convertUsertoDto(user);
+        UserDto userDto = userService.convertUserToDto(user);
         return ResponseEntity.ok(new ApiResponse("User found!", userDto));
     }
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addUser(@RequestBody CreateUserRequest createUserRequest)  {
         User user = userService.createUser(createUserRequest);
-        UserDto userDto = userService.convertUsertoDto(user);
+        UserDto userDto = userService.convertUserToDto(user);
         return ResponseEntity.ok(new ApiResponse("User created!", userDto));
     }
 
     @PutMapping("/{userId}/update")
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UserUpdateRequest userUpdateRequest, @PathVariable Long userId)  {
         User user = userService.updateUser(userUpdateRequest, userId);
-        UserDto userDto = userService.convertUsertoDto(user);
+        UserDto userDto = userService.convertUserToDto(user);
         return ResponseEntity.ok(new ApiResponse("User updated!", userDto));
     }
     @DeleteMapping("/{userId}/delete")
