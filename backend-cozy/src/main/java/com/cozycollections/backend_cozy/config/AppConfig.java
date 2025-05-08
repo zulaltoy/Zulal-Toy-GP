@@ -2,6 +2,7 @@ package com.cozycollections.backend_cozy.config;
 
 import com.cozycollections.backend_cozy.security.jwt.AuthTokenFilter;
 import com.cozycollections.backend_cozy.security.jwt.JwtEntryPoint;
+import com.cozycollections.backend_cozy.security.userDetail.ShopUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -26,10 +26,12 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class AppConfig {
+
     @Value("${api.prefix}")
     private static String API;
     private static final List<String> SECURED_URLS =
-            List.of(API + "/carts/**",API + "/cartItems/**",API + "/orders/**");
+            List.of(API + "/carts/**", API + "/cartItems/**", API + "/orders/**");
+    private final ShopUserDetailsService userDetailsService;
 
     private final JwtEntryPoint jwtEntryPoint;
 
@@ -49,14 +51,20 @@ public class AppConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authTokenFilter) throws Exception {
-        return authTokenFilter.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager(); // Doğru yapılandırma
+    }
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        var authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.csrf(AbstractHttpConfigurer :: disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -67,61 +75,5 @@ public class AppConfig {
         return http.build();
     }
 }
-//@Configuration
-//@EnableWebSecurity
-//@RequiredArgsConstructor
-//public class AppConfig {
-//
-//    @Value("${api.prefix}")
-//    private String apiPrefix;
-//
-//    private static String API;
-//    private static List<String> SECURED_URLS;
-//
-//    private final JwtEntryPoint jwtEntryPoint;
-//
-//    @PostConstruct
-//    public void init() {
-//        API = apiPrefix;
-//        SECURED_URLS = List.of(
-//                API + "/carts/**",
-//                API + "/cartItems/**",
-//                API + "/orders/**"
-//        );
-//    }
-//
-//    @Bean
-//    public ModelMapper modelMapper() {
-//        return new ModelMapper();
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public AuthTokenFilter authTokenFilter() {
-//        return new AuthTokenFilter();
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authTokenFilter) throws Exception {
-//        return authTokenFilter.getAuthenticationManager();
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//
-//        http.csrf(AbstractHttpConfigurer::disable)
-//                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(SECURED_URLS.toArray(new String[0])).authenticated()
-//                        .anyRequest().permitAll());
-//
-//        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
-//}
+
 

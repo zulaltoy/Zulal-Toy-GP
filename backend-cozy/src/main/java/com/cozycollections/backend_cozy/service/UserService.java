@@ -23,6 +23,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+
     @Override
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
@@ -50,7 +51,7 @@ public class UserService implements IUserService {
             existingUser.setFirstName(updateRequest.getFirstName());
             existingUser.setLastName(updateRequest.getLastName());
             existingUser.setEmail(updateRequest.getEmail());
-            existingUser.setPassword(updateRequest.getPassword());
+            existingUser.setPassword(passwordEncoder.encode(updateRequest.getPassword()));
             return userRepository.save(existingUser);
         }).orElseThrow(()-> new EntityNotFoundException("User not found!"));
     }
@@ -73,7 +74,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDto convertUsertoDto(User user) {
+    public UserDto convertUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
 }

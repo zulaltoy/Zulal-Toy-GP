@@ -1,19 +1,17 @@
 package com.cozycollections.backend_cozy.security.jwt;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,6 +26,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired //Spring, JwtUtils nesnesini otomatik olarak enjekte eder. new kullanmaya gerek kalmaz.
     private JwtUtils jwtUtils;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,  //JWT'yi kontrol eden ana metottur. Her HTTP isteği geldiğinde çalışır.
@@ -39,13 +39,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
             if(StringUtils.hasText(jwt) && jwtUtils.validateToken(jwt)){
                 String username = jwtUtils.getUserNameFromToken(jwt);
-                List<String> roles = jwtUtils.getRolesFromToken(jwt);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                var authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
 
-                var auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+                var auth = new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
@@ -64,6 +62,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         HashMap<String,String> error = new HashMap<>();
         error.put("message", "Unauthorized user! Please log in and try again");
+
 
 
         ObjectMapper objectMapper = new ObjectMapper();
