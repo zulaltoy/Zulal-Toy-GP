@@ -1,12 +1,7 @@
 package com.cozycollections.backend_cozy.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cozycollections.backend_cozy.model.Cart;
 import com.cozycollections.backend_cozy.model.User;
@@ -34,14 +29,13 @@ public class CartItemController {
     }
 
     @PutMapping("/cart/{cartId}/item/{cartItemId}/update")
-    public ResponseEntity<ApiResponse> updateCartItem(@RequestParam int quantity, @RequestParam Long cartItemId,
-            @RequestParam Long cartId) {
+    public ResponseEntity<ApiResponse> updateCartItem( @PathVariable Long cartId,@PathVariable Long cartItemId,@RequestParam int quantity) {
         cartItemService.updateCartItemQuantity(cartId, cartItemId, quantity);
         return ResponseEntity.ok(new ApiResponse("Cart item updated successfully", null));
     }
 
     @DeleteMapping("/cart/{cartId}/item/{cartItemId}/delete")
-    public ResponseEntity<ApiResponse> deleteCartItem(@RequestParam Long cartItemId, @RequestParam Long cartId) {
+    public ResponseEntity<ApiResponse> deleteCartItem(@PathVariable Long cartItemId, @PathVariable Long cartId) {
         cartItemService.deleteCartItemFromCart(cartId, cartItemId);
         return ResponseEntity.ok(new ApiResponse("Cart item deleted successfully", null));
     }
