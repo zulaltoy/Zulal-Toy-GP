@@ -35,14 +35,14 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Products fetched successfully", productDtos));
     }
 
-    @GetMapping("product/{productId}/product")
+    @GetMapping("/{productId}")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         Product product = productService.getProductById(productId);
         ProductDto productDto = productService.convertProductToDto(product);
         return ResponseEntity.ok(new ApiResponse("Product fetched successfully", productDto));
     }
 
-    @PutMapping("/product/{productId}/update")
+    @PutMapping("/{productId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest productUpdateRequest,
             @PathVariable Long productId) {
         Product product = productService.updateProduct(productUpdateRequest, productId);
@@ -57,14 +57,14 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Product added successfully", productDto));
     }
 
-    @DeleteMapping("/product/{productId}/delete")
+    @DeleteMapping("/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         productService.deleteProductById(productId);
         return ResponseEntity.ok(new ApiResponse("Product deleted successfully", productId));
 
     }
 
-    @GetMapping("/products/by/brand-and-name")
+    @GetMapping("/by/brand-and-name")
     public ResponseEntity<ApiResponse> getProductsByBrandAndName(@RequestParam String brandName,
             @RequestParam String productName) {
 
@@ -73,30 +73,30 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Products by brand fetched successfully", productDtos));
     }
 
-    @GetMapping("/products/by-brand")
+    @GetMapping("/by-brand")
     public ResponseEntity<ApiResponse> findProductsByBrand(@RequestParam String brandName) {
         List<Product> products = productService.getProductsByBrand(brandName);
         List<ProductDto> productDtos = productService.getConvertedProducts(products);
-        return ResponseEntity.ok(new ApiResponse("Products by brand name fetched succesfully", productDtos));
+        return ResponseEntity.ok(new ApiResponse("Products by brand name fetched successfully", productDtos));
     }
 
-    @GetMapping("/products/by/category-and-brand")
+    @GetMapping("/by/category-and-brand")
     public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@RequestParam String categoryName,
             @RequestParam String brandName) {
         List<Product> products = productService.getProductsByCategoryAndBrand(categoryName, brandName);
         List<ProductDto> productDtos = productService.getConvertedProducts(products);
         return ResponseEntity
-                .ok(new ApiResponse("Products by category and brand name fetched succesfully", productDtos));
+                .ok(new ApiResponse("Products by category and brand name fetched successfully", productDtos));
     }
 
-    @GetMapping("/products/{name}/products")
+    @GetMapping("/by-name/{name}")
     public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name) {
         List<Product> products = productService.getProductsByName(name);
         List<ProductDto> productDtos = productService.getConvertedProducts(products);
         return ResponseEntity.ok(new ApiResponse("Products by name fetched successfully", productDtos));
     }
 
-    @GetMapping("/products/{category}/all/products")
+    @GetMapping("/by-category/{category}")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
         List<Product> products = productService.getProductsByCategory(category);
         List<ProductDto> productDtos = productService.getConvertedProducts(products);

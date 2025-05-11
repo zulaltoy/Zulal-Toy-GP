@@ -1,15 +1,22 @@
+import { Route,RouterProvider,createBrowserRouter,createRoutesFromElements }from 'react-router-dom'
 
-
-import './App.css'
+import Home from './pages/Home';
+import RootLayout from './layouts/RootLayout';
 
 function App() {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<RootLayout/>}>
+        <Route index element={<Home/>}/>
+        
+      </Route>
+    )
+  )
   
 
   return (
-    <div>
-      <h1>Welcome to Cozy Collections</h1>
-    </div>
+    <RouterProvider router={router} />
   )
 }
 
-export default App
+export default App;

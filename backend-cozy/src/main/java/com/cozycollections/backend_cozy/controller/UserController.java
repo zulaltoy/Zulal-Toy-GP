@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final IUserService userService;
 
-    @GetMapping("/user/{userId}/user")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId)  {
         User user = userService.getUserById(userId);
         UserDto userDto = userService.convertUserToDto(user);

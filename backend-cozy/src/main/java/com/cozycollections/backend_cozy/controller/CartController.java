@@ -25,7 +25,7 @@ public class CartController {
         return ResponseEntity.ok(new ApiResponse("Fetched cart successfully", cart));
     }
 
-    @DeleteMapping("/cart/{userId}/clear")
+    @DeleteMapping("/cart/{cartId}/clear")
     public void clearCart(@PathVariable Long cartId) {
         cartService.deleteCartByCartId(cartId);
 

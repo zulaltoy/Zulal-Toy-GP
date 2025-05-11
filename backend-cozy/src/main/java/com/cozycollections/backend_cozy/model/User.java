@@ -39,4 +39,7 @@ public class User {
 
     )
     private Collection<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Address> addresses;
 }
