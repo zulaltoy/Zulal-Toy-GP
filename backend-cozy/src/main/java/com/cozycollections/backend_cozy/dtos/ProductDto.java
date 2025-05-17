@@ -13,7 +13,6 @@ public class ProductDto {
     private BigDecimal price;
     private int inventory;
     private String material;
-    private String brand;
     private String productCode;
     private  String color;
     private Double width;

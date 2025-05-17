@@ -1,9 +1,6 @@
 package com.cozycollections.backend_cozy.security.jwt;
 
-
 import com.cozycollections.backend_cozy.security.userDetail.ShopUserDetails;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
-
 
 import java.security.Key;
 import java.util.Date;
@@ -31,15 +27,12 @@ public class JwtUtils {
     @Value("${auth.token.refreshExpirationInMils}")
     private String refreshExpirationTime;
 
-
     public String generateAccessTokenForUser(Authentication authentication) {
         ShopUserDetails userPrincipals = (ShopUserDetails) authentication.getPrincipal();
 
-       List<String> roles = userPrincipals.getAuthorities()
-               .stream()
-               .map(GrantedAuthority::getAuthority).toList();
-
-
+        List<String> roles = userPrincipals.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority).toList();
 
         return Jwts.builder()
                 .setSubject(userPrincipals.getEmail())
@@ -48,8 +41,7 @@ public class JwtUtils {
                 .setIssuedAt(new Date())
                 .setExpiration(calculateExpirationTime(expirationTime))
                 .signWith(getSignedKey(), SignatureAlgorithm.HS256)
-                .compact(); //Token'ı string'e çevirir.
-
+                .compact(); // Token'ı string'e çevirir.
 
     }
 
@@ -58,7 +50,7 @@ public class JwtUtils {
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(calculateExpirationTime(refreshExpirationTime))
-                .signWith(getSignedKey(),SignatureAlgorithm.HS256)
+                .signWith(getSignedKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -68,7 +60,8 @@ public class JwtUtils {
     }
 
     private Key getSignedKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)); //Şifrelenmiş anahtarı çözerek Key nesnesi üretir.
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)); // Şifrelenmiş anahtarı çözerek Key nesnesi
+                                                                      // üretir.
     }
 
     public String getUserNameFromToken(String token) {
@@ -80,19 +73,18 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token) {
-        try{
+        try {
             Jwts.parserBuilder()
                     .setSigningKey(getSignedKey())
                     .build()
                     .parseClaimsJws(token);
             return true;
-        }catch (JwtException e){
-            //throw new JwtException(e.getMessage());
+        } catch (JwtException e) {
+            // throw new JwtException(e.getMessage());
             System.out.println("Invalid JWT token: " + e.getMessage());
 
             return false;
         }
     }
-
 
 }

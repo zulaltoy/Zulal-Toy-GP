@@ -18,8 +18,11 @@ const searchSlice = createSlice({
         resetSearch: (state) => {
             state.searchTerm = "";
             state.selectedCategory = "all";
+        },
+        setInitialSearchTerm :(state,action)=>{
+            state.searchTerm = action.payload;
         }
     }
 });
-export const { setSearchTerm, setSelectedCategory, resetSearch } = searchSlice.actions;
+export const { setSearchTerm, setSelectedCategory, resetSearch,setInitialSearchTerm } = searchSlice.actions;
 export default searchSlice.reducer;

@@ -15,11 +15,11 @@ export const privateApi = axios.create({
 
 const refreshToken = async () => {
   try{
-    const response = await axios.post(`${BASE_URL}/auth/refresh-token`);
+    const response = await api.post(`/auth/refresh-token`);
     return response.data.accessToken;
   }catch (error) {
     console.error("Error refreshing token", error);
-    throw error;
+    return Promise.reject(error);
   }
 }
 privateApi.interceptors.request.use(
@@ -30,6 +30,9 @@ privateApi.interceptors.request.use(
     }
     return config;
 
+  },
+  (error)=>{
+    return Promise.reject(error);
   }
 );
 privateApi.interceptors.response.use(
@@ -45,9 +48,9 @@ privateApi.interceptors.response.use(
       localStorage.setItem("authToken", newAccessToken);
       originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
       return privateApi(originalRequest);
-      }catch (error) {
+      }catch (refreshError) {
         logoutUser();
-        return Promise.reject(error);
+        return Promise.reject(refreshError);
       }    
     }
     return Promise.reject(error);
