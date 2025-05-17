@@ -21,7 +21,6 @@ public class Product {
     private BigDecimal price;
     private int inventory;
     private String material;
-    private String brand;
     private String productCode;
     private  String color;
     private Double width;
@@ -40,13 +39,12 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
-    public Product(String name, String description, BigDecimal price, int inventory, String material, String brand, String productCode, String color, Double width, Double height, String widthUnit, String heightUnit, Double length, String lengthUnit, Double weight, Category category, String weightUnit) {
+    public Product(String name, String description, BigDecimal price, int inventory, String material, String productCode, String color, Double width, Double height, String widthUnit, String heightUnit, Double length, String lengthUnit, Double weight, Category category, String weightUnit) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.inventory = inventory;
         this.material = material;
-        this.brand = brand;
         this.productCode = productCode;
         this.color = color;
         this.width = width;

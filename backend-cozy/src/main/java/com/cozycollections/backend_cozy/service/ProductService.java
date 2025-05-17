@@ -33,23 +33,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return productRepository.findByCategoryNameAndBrand(category, brand);
-    }
-
-    @Override
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategoryName(category);
-    }
-
-    @Override
-    public List<Product> getProductsByBrandAndName(String brand, String name) {
-        return productRepository.findByNameAndBrand(brand, name);
-    }
-
-    @Override
-    public List<Product> getProductsByBrand(String brand) {
-        return productRepository.findByBrand(brand);
     }
 
     @Override
@@ -91,7 +76,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest productRequest) {
-        if (productExists(productRequest.getName(), productRequest.getBrand())) {
+        if (productExists(productRequest.getName())) {
             throw new EntityExistsException(productRequest.getName() + "Product already exists");
         }
         Category category = Optional.ofNullable(categoryRepository.findByName(productRequest.getCategory().getName()))
@@ -104,8 +89,8 @@ public class ProductService implements IProductService {
 
     }
 
-    private boolean productExists(String name, String brand) {
-        return productRepository.existsByNameAndBrand(name, brand);
+    private boolean productExists(String name) {
+        return productRepository.existsByName(name);
     }
 
     public Product createProduct(AddProductRequest productRequest, Category category) {
@@ -115,7 +100,6 @@ public class ProductService implements IProductService {
                 productRequest.getPrice(),
                 productRequest.getInventory(),
                 productRequest.getMaterial(),
-                productRequest.getBrand(),
                 productRequest.getProductCode(),
                 productRequest.getColor(),
                 productRequest.getWidth(),
@@ -146,7 +130,6 @@ public class ProductService implements IProductService {
         existingProduct.setPrice(productUpdateRequest.getPrice());
         existingProduct.setInventory(productUpdateRequest.getInventory());
         existingProduct.setMaterial(productUpdateRequest.getMaterial());
-        existingProduct.setBrand(productUpdateRequest.getBrand());
         existingProduct.setProductCode(productUpdateRequest.getProductCode());
         existingProduct.setColor(productUpdateRequest.getColor());
         existingProduct.setWidth(productUpdateRequest.getWidth());
@@ -174,6 +157,11 @@ public class ProductService implements IProductService {
         productDto.setImages(imageDtos);
         return productDto;
 
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryId(Long categoryId) {
+        return productRepository.findAllByCategoryId(categoryId);
     }
 
 }

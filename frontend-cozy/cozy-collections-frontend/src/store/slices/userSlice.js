@@ -31,6 +31,35 @@ export const getCountryNames = createAsyncThunk(
         return countryNames;
     }
 );
+export const addAddress = createAsyncThunk(
+  "user/addAddress",
+  async({address,userId})=>{
+    const response = await api.post(`/addresses/${userId}/add`,[address]);
+    return response.data;
+  }
+);
+export const fetchAddresses = createAsyncThunk(
+  "user/fetchAddresses",
+  async(userId) =>{
+    const response = await api.get(`/addresses/${userId}/address`);
+    return response.data;
+  }
+);
+export const updateAddress = createAsyncThunk(
+  "user/updateAddress",
+  async({id,address}) =>{
+    const response = await api.put(`/addresses/${id}/update`,address);
+    return response.data;
+  }
+);
+export const deleteAddress = createAsyncThunk(
+  "user/deleteAddress",
+  async({id}) =>{
+    const response = await api.delete(`/addresses/${id}/delete`);
+    return response.data;
+  }
+);
+
 const initialState = {
   user: null,
   countryNames: [],
@@ -44,6 +73,9 @@ const userSlice = createSlice({
     setUser: (state,action) => {
       state.user = action.payload;
     },
+    setUserAddress(state,action){
+      state.user.addressList = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -67,5 +99,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, setUserAddress } = userSlice.actions;
 export default userSlice.reducer;

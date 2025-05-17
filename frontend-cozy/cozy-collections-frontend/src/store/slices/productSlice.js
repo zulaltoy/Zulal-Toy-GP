@@ -33,40 +33,15 @@ export const deleteProduct = createAsyncThunk(
 );
 
  
-export const getAllProductsByBrand = createAsyncThunk(
-    "product/getAllProductsByBrand",
-    async (brandName) => {
-        const response = await api.get("/products/by-brand"
-            ,{params: {brandName},
-        });
+export const getProductsByCategoryId = createAsyncThunk(
+    "product/getProductByCategoryId",
+    async(categoryId)=>{
+        const response = await api.get(`/products/category/${categoryId}/products`);
         return response.data.data;
     }
-);
-export const getProductsByCategory = createAsyncThunk(
-    "product/getProductsByCategory",
-     async (category) => {
-    const response = await api.get(`/products/by-category/${category}`);
-    return response.data.data;
-  }
-);
-export const getAllProductsByBrandAndName = createAsyncThunk(
-    "product/getAllProductsByBrandAndName",
-    async({brandName,productName}) => {
-        const response= await api.get("/products/by/brand-and-name",{
-            params: {brandName,productName},
-        });
-        return response.data.data;
-    }
-);
-export const getProductsByCategoryAndBrand = createAsyncThunk(
-    "product/getProductsByCategoryAndBrand",
-    async({categoryName,brandName}) => {
-        const response = await api.get("/products/by/category-and-brand",{
-            params: {categoryName,brandName},
-        });
-        return response.data.data;
-    }
-);
+)
+
+
 
 export const getProductsByName= createAsyncThunk(
     "product/getProductsByName",
@@ -89,8 +64,6 @@ const initialState={
     products: [],
     product:null,
     selectedProduct: null,
-    selectedBrands: [],
-    brands: [],
     quantity:1,
     isLoading: false,
     errorMessage: null,
@@ -101,23 +74,11 @@ const productSlice = createSlice({
     name:"product",
     initialState,
 reducers: {
-    filterByBrands: (state, action) => {
-        const {brand,isChecked} = action.payload;
-        if(isChecked){
-            state.brands.push(brand);
-        }else{
-            state.selectedBrands = state.brands.filter((b) => b !== brand);
-        }
-    },
+ 
     setQuantity: (state, action) => {
         state.quantity = action.payload;
     },
-    addBrand: (state, action) => {
-       
-            state.brands.push(action.payload);
-        }
-    },
-
+},
 
 extraReducers: (builder) => {
     builder
@@ -137,23 +98,13 @@ extraReducers: (builder) => {
         state.product = action.payload;
         state.isLoading = false;
       })
-        .addCase(getAllProductsByBrand.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.brands = action.payload;
-        })
-        .addCase(getAllProductsByBrandAndName.fulfilled, (state, action) => {
-            state.products = action.payload;
-            state.isLoading = false;
-        })
-        .addCase(getProductsByCategory.fulfilled, (state, action) => {
+       
+        .addCase(getProductsByCategoryId.fulfilled, (state, action) => {
             state.products = action.payload;
             state.isLoading = false;
             state.errorMessage=null;
         })
-        .addCase(getProductsByCategoryAndBrand.fulfilled, (state, action) => {
-            state.products = action.payload;
-            state.isLoading = false;
-        })
+       
          .addCase(getProductsByName.fulfilled, (state, action) => {
             state.products = action.payload;
             state.isLoading = false;
@@ -187,5 +138,5 @@ extraReducers: (builder) => {
 
 });
 
-export const { filterByBrands,setQuantity,addBrand } = productSlice.actions;
+export const { setQuantity } = productSlice.actions;
 export default productSlice.reducer;

@@ -12,7 +12,7 @@ import java.util.Arrays;
 @Component
 public class CookieHelper {
 
-    @Value("false")
+    @Value("${app.useSecureCookie:false}")
     private boolean useSecureCookie;
 
     public void addRefreshTokenCookie(HttpServletResponse response, String refreshToken,long maxAge){

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cozycollections.backend_cozy.dtos.ProductDto;
@@ -64,31 +63,6 @@ public class ProductController {
 
     }
 
-    @GetMapping("/by/brand-and-name")
-    public ResponseEntity<ApiResponse> getProductsByBrandAndName(@RequestParam String brandName,
-            @RequestParam String productName) {
-
-        List<Product> products = productService.getProductsByBrandAndName(brandName, productName);
-        List<ProductDto> productDtos = productService.getConvertedProducts(products);
-        return ResponseEntity.ok(new ApiResponse("Products by brand fetched successfully", productDtos));
-    }
-
-    @GetMapping("/by-brand")
-    public ResponseEntity<ApiResponse> findProductsByBrand(@RequestParam String brandName) {
-        List<Product> products = productService.getProductsByBrand(brandName);
-        List<ProductDto> productDtos = productService.getConvertedProducts(products);
-        return ResponseEntity.ok(new ApiResponse("Products by brand name fetched successfully", productDtos));
-    }
-
-    @GetMapping("/by/category-and-brand")
-    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@RequestParam String categoryName,
-            @RequestParam String brandName) {
-        List<Product> products = productService.getProductsByCategoryAndBrand(categoryName, brandName);
-        List<ProductDto> productDtos = productService.getConvertedProducts(products);
-        return ResponseEntity
-                .ok(new ApiResponse("Products by category and brand name fetched successfully", productDtos));
-    }
-
     @GetMapping("/by-name/{name}")
     public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name) {
         List<Product> products = productService.getProductsByName(name);
@@ -102,5 +76,12 @@ public class ProductController {
         List<ProductDto> productDtos = productService.getConvertedProducts(products);
         return ResponseEntity.ok(new ApiResponse("Products by category fetched successfully", productDtos));
     }
+    @GetMapping("/category/{categoryId}/products")
+    public ResponseEntity<ApiResponse> findProductsByCategoryId(@PathVariable Long categoryId) {
+        List<Product> products = productService.getProductsByCategoryId(categoryId);
+        List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+        return ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+    }
+
 
 }
