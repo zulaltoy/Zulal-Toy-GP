@@ -3,14 +3,8 @@ package com.cozycollections.backend_cozy.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.cozycollections.backend_cozy.dtos.ProductDto;
 import com.cozycollections.backend_cozy.model.Product;
@@ -41,6 +35,7 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Product fetched successfully", productDto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{productId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest productUpdateRequest,
             @PathVariable Long productId) {
@@ -49,6 +44,7 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Product updated successfully", productDto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest addProductRequest) {
         Product product = productService.addProduct(addProductRequest);
@@ -56,6 +52,7 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Product added successfully", productDto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         productService.deleteProductById(productId);
@@ -69,7 +66,6 @@ public class ProductController {
         List<ProductDto> productDtos = productService.getConvertedProducts(products);
         return ResponseEntity.ok(new ApiResponse("Products by name fetched successfully", productDtos));
     }
-
     @GetMapping("/by-category/{category}")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
         List<Product> products = productService.getProductsByCategory(category);
@@ -81,6 +77,13 @@ public class ProductController {
         List<Product> products = productService.getProductsByCategoryId(categoryId);
         List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
         return ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+    }
+
+    @GetMapping("/distinct/products")
+    public ResponseEntity<ApiResponse> getDistinctProductsByName() {
+        List<Product> products = productService.findDistinctProductsByName();
+        List<ProductDto> productDtos = productService.getConvertedProducts(products);
+        return ResponseEntity.ok(new ApiResponse("Found", productDtos));
     }
 
 

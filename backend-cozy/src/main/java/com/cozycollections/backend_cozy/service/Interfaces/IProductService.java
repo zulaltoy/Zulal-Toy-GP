@@ -8,19 +8,27 @@ import com.cozycollections.backend_cozy.request.ProductUpdateRequest;
 import java.util.List;
 
 public interface IProductService {
-    List<Product> getAllProducts();
+    Product addProduct(AddProductRequest product);
 
-    List<Product> getProductsByCategory(String category);
-
-    List<Product> getProductsByName(String name);
+    Product updateProduct(ProductUpdateRequest product, Long productId);
 
     Product getProductById(Long productId);
 
     void deleteProductById(Long productId);
 
-    Product addProduct(AddProductRequest productRequest);
+    List<Product> getAllProducts();
 
-    Product updateProduct(ProductUpdateRequest productRequest, Long productId);
+
+
+    List<Product> getProductsByCategory(String category);
+
+
+
+    List<Product> getProductsByName(String name);
+
+    List<Product> findDistinctProductsByName();
+
+
 
     List<ProductDto> getConvertedProducts(List<Product> products);
 

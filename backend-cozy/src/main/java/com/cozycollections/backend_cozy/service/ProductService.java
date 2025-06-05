@@ -13,8 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +42,18 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getProductsByName(String name) {
-        return productRepository.findByProductName(name);
+        return Optional.ofNullable(productRepository.findByProductName(name))
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+    }
+    @Override
+    public List<Product> findDistinctProductsByName(){
+        List<Product> products = getAllProducts();
+        Map<String, Product> distinctProductMap = products.stream()
+                .collect(Collectors.toMap(
+                        Product :: getName,
+                        product -> product,
+                        (existing, replacement) -> existing));
+        return new ArrayList<>(distinctProductMap.values());
     }
 
     @Override
