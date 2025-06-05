@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import {api,privateApi} from "../../services/api";
+import { api, privateApi } from "../../services/api";
 
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
@@ -61,20 +61,31 @@ const cartSlice = createSlice({
       .addCase(addToCart.rejected, (state, action) => {
         state.errorMessage = action.error.message;
       })
+      .addCase(getUserCart.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getUserCart.fulfilled, (state, action) => {
-        state.cartItems = action.payload.cartItems;
-        state.cartId = action.payload.cartId;
-        state.totalAmount = action.payload.totalAmount;
+        // state.cartItems = action.payload.cartItems;
+        // state.cartId = action.payload.cartId;
+        // state.totalAmount = action.payload.totalAmount;
+        // state.isLoading = false;
+        // state.errorMessage = null;
+        const cart = action.payload;
+
+        state.cartItems = cart.items || [];
+        state.cartId = cart.id;
+        state.totalAmount = cart.totalAmount || 0;
         state.isLoading = false;
         state.errorMessage = null;
       })
       .addCase(getUserCart.rejected, (state, action) => {
         state.errorMessage = action.error.message;
+        state.isLoading = false;
       })
       .addCase(updateQuantity.fulfilled, (state, action) => {
         const { cartItemId, newQuantity } = action.payload;
         const cartItem = state.cartItems.find(
-          (cartItem) => cartItem.product.id === cartItemId
+          (cartItem) => cartItem.id === cartItemId
         );
         if (cartItem) {
           cartItem.quantity = newQuantity;
@@ -88,7 +99,7 @@ const cartSlice = createSlice({
       .addCase(deleteItemFromCart.fulfilled, (state, action) => {
         const cartItemId = action.payload;
         state.cartItems = state.cartItems.filter(
-          (cartItem) => cartItem.product.id !== cartItemId
+          (cartItem) => cartItem.id !== cartItemId
         );
         state.totalAmount = state.cartItems.reduce(
           (total, cartItem) => total + cartItem.totalAmount,

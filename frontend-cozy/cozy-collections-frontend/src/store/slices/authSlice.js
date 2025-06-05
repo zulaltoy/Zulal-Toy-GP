@@ -13,13 +13,22 @@ export const login = createAsyncThunk(
 const initialState ={
     isAuthenticated: !!localStorage.getItem("authToken"),  //!! means changing something true or false
     token: localStorage.getItem("authToken") || null,
-    roles: JSON.parse(localStorage.getItem("roles")) || [],
+    roles: JSON.parse(localStorage.getItem("userRoles")) || [],
     errorMessage:null,
 }
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers:{
+        logout:(state)=>{
+            state.isAuthenticated= false;
+            state.token =null;
+            state.roles=[];
+            state.errorMessage =null;
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("userRoles");
+            localStorage.removeItem("userId");
+        },
        
     },
     extraReducers: (builder) => {
@@ -30,9 +39,10 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
             state.token = action.payload.accessToken;
             state.roles = decodedToken.roles;
+
             localStorage.setItem("authToken", action.payload.accessToken);
             localStorage.setItem("userRoles", JSON.stringify(decodedToken.roles));
-            localStorage.setItem("UserId", decodedToken.id);
+            localStorage.setItem("userId", decodedToken.id);
         }
         )
         .addCase(login.rejected,(state,action)=>{
@@ -42,5 +52,5 @@ const authSlice = createSlice({
 }
 ,
 });
-
+export const {logout} = authSlice.actions;
 export default authSlice.reducer;

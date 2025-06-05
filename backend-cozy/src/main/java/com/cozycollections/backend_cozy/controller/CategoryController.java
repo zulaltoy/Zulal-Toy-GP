@@ -29,7 +29,7 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponse("Categories fetched successfully", categories));
     }
 
-    @GetMapping("/category/{id}/category")
+    @GetMapping("/{id}/category")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         Category category = categoryService.getCategoryById(id);
         return ResponseEntity.ok(new ApiResponse("Category fetched successfully", category));

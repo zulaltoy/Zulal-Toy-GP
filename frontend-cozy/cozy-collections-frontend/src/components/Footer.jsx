@@ -13,8 +13,9 @@ const Footer = () => {
   },[dispatch]);
 
   return (
-    <footer className="bg-gray-900 text-white py-10 mt-10">
-    <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <>
+    <footer  className="bg-gray-100 border-t mt-10">
+    <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between">
       <div>
         <h3 className="text-lg font-semibold mb-2">About Us</h3>
         <p className="text-sm text-gray-400">
@@ -27,7 +28,8 @@ const Footer = () => {
         <ul className="text-sm text-gray-400 space-y-1">
         {Array.isArray(categories) && categories.map((category,index)=>{
           <li key={index}>
-           <Link to={`/products/category/${category.id}/products`}>{category.name}</Link> </li>
+           <Link to={`/products/category/${category.id}/products`}>{category.id}</Link> </li>
+          //  <Link to={`/products/category/${category.id}/products`}>{category.name}</Link> </li>
         })}
         </ul>
       </div>
@@ -73,6 +75,8 @@ const Footer = () => {
       <p>&copy; 2025 cozycollections.com. All rights reserved.</p>
     </div>
   </footer>
+ 
+</>
 );
 }
 
