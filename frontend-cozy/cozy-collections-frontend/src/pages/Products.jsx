@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
-import {  getProductsByCategoryId } from '../store/slices/productSlice';
+import {  getProductsByCategoryId,getAllProducts } from '../store/slices/productSlice';
 import { getAllCategories } from '../store/slices/categorySlice';
 import { setInitialSearchTerm } from '../store/slices/searchSlice';
+import SearchBar from '../components/SearchBar';
+
+import { Link } from 'react-router-dom';
 
 const Products = () => {
   const [filteredProducts, setFilteredProducts]= useState([]);
   const dispatch = useDispatch();
-  const {products} = useSelector((state) => state.product);
+  const products = useSelector((state) => state.product.products || []);
     
   const {searchTerm,selectedCategory} = useSelector((state)=> state.search);
   const isLoading = useSelector((state) => state.product.isLoading);
@@ -24,6 +27,7 @@ const Products = () => {
     if(categoryId){
       dispatch(getProductsByCategoryId(categoryId));
     }else{
+      dispatch(getAllProducts());
       dispatch(getAllCategories());
     }
   },[dispatch,categoryId]);
@@ -33,6 +37,8 @@ const Products = () => {
   },[initialSearchTerm,dispatch]);
 
  useEffect(() => {
+  if(!Array.isArray(products)) return;
+
     const results = products.filter((product) => {
       const matchesQuery = product.name
         .toLowerCase()
@@ -71,7 +77,7 @@ const Products = () => {
       <div className="flex">
        
         <aside className="w-64 p-4 border-r border-gray-300">
-          <SideBar />
+          
         </aside>
 
      

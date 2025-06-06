@@ -5,10 +5,10 @@ const ProductImage = ({productId}) => {
     const [ProductImage, setProductImage] = useState(null);
 
     useEffect(() =>{
-        const fetchProductImage = async (id) =>{
+        const fetchProductImage = async (imageId) =>{
             try{
                 const response = await fetch(
-                    `https://localhost:9090/api/v1/images/image/download/${id}`
+                    `http://localhost:9090/api/v1/images/image/download/${imageId}`
                 )
                 const blob =  await response.blob();
                 const reader = new FileReader();
