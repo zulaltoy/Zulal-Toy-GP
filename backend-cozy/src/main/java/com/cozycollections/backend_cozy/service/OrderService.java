@@ -8,9 +8,13 @@ import com.cozycollections.backend_cozy.model.OrderItem;
 import com.cozycollections.backend_cozy.model.Product;
 import com.cozycollections.backend_cozy.repository.OrderRepository;
 import com.cozycollections.backend_cozy.repository.ProductRepository;
+import com.cozycollections.backend_cozy.request.PaymentRequest;
 import com.cozycollections.backend_cozy.service.Interfaces.ICartService;
 import com.cozycollections.backend_cozy.service.Interfaces.IOrderService;
 
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -77,6 +81,22 @@ public class OrderService implements IOrderService {
         return orders.stream()
                 .map(this::convertOrderToDto)
                 .toList();
+    }
+
+    @Override
+    public String createPaymentIntent(PaymentRequest request) throws StripeException {
+        long amountUnit = Math.round(request.getAmount() * 100); //bc stripe work with the smallest denomination of the provided currency
+
+        PaymentIntent paymentIntent = PaymentIntent.create(
+                PaymentIntentCreateParams.builder()
+                        .setAmount(amountUnit)
+                        .setCurrency(request.getCurrency())
+                        .addPaymentMethodType("card")
+                .build());
+        return paymentIntent.getClientSecret();
+        //clientsecret is a token  authenticating PaymentIntent created by Stripe
+        //Used on the frontend side to send card information to Stripe
+
     }
 
     @Override

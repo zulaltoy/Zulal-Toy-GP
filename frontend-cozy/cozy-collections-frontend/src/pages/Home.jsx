@@ -16,10 +16,15 @@ const Home = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  console.log("Products from store: ", products);
+
 
   useEffect(() => {
     dispatch(getDistinctProductsByName());
   }, [dispatch]);
+
+
+
 
   useEffect(() => {
     const results = products.filter((product) => {
@@ -37,14 +42,20 @@ const Home = () => {
     });
 
     setFilteredProducts(results);
-    setCurrentPage(1);
+    
   }, [searchTerm, selectedCategory, products]);
+
+  useEffect(() => {
+  setCurrentPage(1);
+}, [searchTerm, selectedCategory]);
+
+
 
   const indexLastProduct = currentPage * itemsPerPage;
   const indexFirstProduct = indexLastProduct - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexFirstProduct, indexLastProduct);
 
-    if (isLoading) return <div className="text-center py-10">Loading...</div>;
+  if (isLoading) return <div className="text-center py-10">Loading...</div>;
 
   return (
     <>
@@ -82,7 +93,7 @@ const Home = () => {
           ))}
       </div>
 
-      {/* Pagination */}
+     
       {filteredProducts.length > itemsPerPage && (
         <div className="flex justify-center space-x-2 mt-8 mb-12">
           {Array.from({ length: Math.ceil(filteredProducts.length / itemsPerPage) }).map(

@@ -1,23 +1,22 @@
+
 import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import bg1 from "../assets/images/hero-1.jpg";
-import bg2 from "../assets/images/hero-2.jpg";
-import bg3 from "../assets/images/hero-3.jpg";
-import bg4 from "../assets/images/hero-4.jpg";
-import bg5 from "../assets/images/hero-5.jpg";
-import bg6 from "../assets/images/hero-6.jpg";
+import bg1 from "../assets/images/hero1.jpg";
+import bg2 from "../assets/images/hero2.jpg";
+import bg3 from "../assets/images/hero3.jpg";
+import bg4 from "../assets/images/hero4.jpg";
 
-const images = [bg1, bg2, bg3, bg4, bg5, bg6];
+const images = [bg1, bg2, bg3, bg4];
 
 const HeroSlider = () => {
   const settings = {
     infinite: true,
-    speed: 12000,
+    speed: 500,
     autoplay: true,
-    autoplaySpeed: 15000,
+    autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
@@ -25,14 +24,14 @@ const HeroSlider = () => {
   };
 
   return (
-    <div className="w-full h-48 md:h-72 lg:h-96 rounded-lg overflow-hidden shadow">
-      <Slider {...settings} className="w-full h-full">
+    <div className="w-full h-full">
+      <Slider {...settings}>
         {images.map((img, index) => (
-          <div key={index} className="w-full h-full">
+          <div key={index}>
             <img
               src={img}
               alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-[300px] md:h-[500px] object-cover"
             />
           </div>
         ))}

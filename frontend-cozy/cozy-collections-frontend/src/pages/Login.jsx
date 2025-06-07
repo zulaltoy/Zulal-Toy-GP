@@ -9,7 +9,7 @@ import { login } from "../store/slices/authSlice";
 
 const Login = () => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -19,7 +19,7 @@ const Login = () => {
   useEffect(()=>{
     if(isAuthenticated){
         navigate(from,{replace: true});
-        window.location.reload();
+      //  window.location.reload();
     }
   },[isAuthenticated,navigate,from]);
 
@@ -53,7 +53,7 @@ const Login = () => {
         )}
 
         <form onSubmit={formik.handleSubmit} className="space-y-4">
-          {/* Email */}
+        
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email
@@ -76,7 +76,7 @@ const Login = () => {
             )}
           </div>
 
-          {/* Password */}
+        
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               Password
@@ -99,7 +99,7 @@ const Login = () => {
             )}
           </div>
 
-          {/* Submit Button */}
+      
           <button
             type="submit"
             disabled={formik.isSubmitting}
