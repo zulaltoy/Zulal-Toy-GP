@@ -1,13 +1,13 @@
 package com.cozycollections.backend_cozy.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import com.cozycollections.backend_cozy.request.PaymentRequest;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cozycollections.backend_cozy.dtos.OrderDto;
 import com.cozycollections.backend_cozy.model.Order;
@@ -33,6 +33,12 @@ public class OrderController {
         Order order = orderService.placeOrder(userId);
         OrderDto orderDto = orderService.convertOrderToDto(order);
         return ResponseEntity.ok(new ApiResponse("Order placed successfully", orderDto));
+    }
+
+    @PostMapping("/create-payment-intent")
+    public ResponseEntity<?> createPaymentIntent(@RequestBody PaymentRequest paymentRequest) throws StripeException {
+        String clientSecret = orderService.createPaymentIntent(paymentRequest);
+        return ResponseEntity.ok(Map.of("clientSecret", clientSecret));
     }
 
 }

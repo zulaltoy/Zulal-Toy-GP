@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteProduct } from '../store/slices/productSlice';
-import Products from './Products';
 import { Link } from 'react-router-dom';
 import ProductImage from '../utils/ProductImage';
 import StockStatus from '../utils/StockStatus';
 
-const ProductCard = () => {
+const ProductCard = ({products}) => {
 
     const dispatch = useDispatch();
     const userRoles = useSelector((state)=> state.auth.roles);
@@ -40,7 +39,7 @@ const ProductCard = () => {
           {message}
         </div>
       )}
-      {Products.map((product) => (
+      {products.map((product) => (
         <div key={product.id} 
         className="border rounded-lg shadow hover:shadow-md transition duration-300 p-3 bg-white flex flex-col justify-between"
       >
@@ -63,23 +62,26 @@ const ProductCard = () => {
             <div className="flex flex-wrap items-center gap-2 mt-2">
               {isAdmin && (
                 <>
-                  <button
+                  <Link
+                   to={"#"}
                     onClick={() => handleDelete(product.id)}
                     className="text-red-500 text-sm hover:underline"
                   >
                     Delete
-                  </button>
+                  </Link>
                   <Link
-                    to={`/update-product/${product.id}/update`}
+                    //to={`/update-product/${product.id}/update`}
                     className="text-blue-500 text-sm hover:underline"
                   >
                     Edit
                   </Link>
                 </>
               )}
-              <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm ml-auto">
+              <Link 
+              to={`/product/${product.id}/details`}
+              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm ml-auto">
                 Add to cart
-              </button>
+              </Link>
             </div>
           </div>
         </div>

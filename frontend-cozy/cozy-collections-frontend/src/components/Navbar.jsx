@@ -23,12 +23,12 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+      
         <Link to="/" className="text-2xl font-bold text-blue-700 tracking-tight">
           Cozy Collections
         </Link>
 
-        {/* Menu Links */}
+      
         <div className="flex items-center space-x-6">
           <Link
             to="/products"
@@ -37,7 +37,7 @@ const Navbar = () => {
             All Products
           </Link>
 
-          {/* Cart */}
+         
           {userId && (
             <Link
               to={`/user/${userId}/my-cart`}
@@ -50,7 +50,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          {/* Dropdown */}
+         
           <div className="relative group">
             <button className="text-gray-800 font-medium focus:outline-none">
               Account ▾

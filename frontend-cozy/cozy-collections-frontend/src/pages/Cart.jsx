@@ -84,7 +84,6 @@ const Cart = () => {
           <div className="grid grid-cols-7 font-bold border-b pb-2 mb-4 text-center text-sm">
             <div>Image</div>
             <div>Name</div>
-            <div>Brand</div>
             <div>Price</div>
             <div>Quantity</div>
             <div>Total Price</div>
@@ -105,7 +104,7 @@ const Cart = () => {
               </Link>
 
               <div>{item.product.name}</div>
-              <div>{item.product.brand}</div>
+             
               <div>${item.product.price.toFixed(2)}</div>
 
               <div className="flex items-center space-x-2">

@@ -13,14 +13,14 @@ import Register from "./pages/Register";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import UserProfile from "./pages/UserProfile";
-//import Order from "./pages/Order";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
-        <Route path="/user-profile/:userId/profile" element={<UserProfile />} />
+        <Route path="/user-profile" element={<UserProfile />} />
 
         <Route path="/products" element={<Products />} />
         <Route path="/products/:name" element={<Products />} />
@@ -35,8 +35,22 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/login" element={<Login />} />
-        <Route path="/user/:userId/my-cart" element={<Cart />} />
-        {/* <Route path='/user/:userId/my-orders' element={<Order />} /> */}
+        
+        <Route
+          element={
+            <ProtectedRoute
+              useOutlet={true}
+              allowedRoles={["ROLE_ADMIN", "ROLE_USER"]}
+            />
+          }>
+          <Route path='/user/:userId/my-cart' element={<Cart />} />
+          <Route
+            path='/user-profile/:userId/profile'
+            element={<UserProfile />}
+          />
+        </Route>
+
+        
       </Route>
     )
   );
