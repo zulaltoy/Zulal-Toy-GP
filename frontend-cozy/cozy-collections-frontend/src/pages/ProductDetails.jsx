@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getProductById, setQuantity } from "../store/slices/productSlice";
 import { addToCart } from "../store/slices/cartSlice";
 import { FaShoppingCart } from "react-icons/fa";
+import ProductImage from "../utils/ProductImage";
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -20,6 +21,10 @@ const ProductDetails = () => {
     dispatch(getProductById(productId));
   }, [dispatch, productId]);
 
+  useEffect(() => {
+    dispatch(setQuantity(1));
+  }, [dispatch, productId]);
+
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
       alert("you need to be logged in to add items to the cart.");
@@ -27,9 +32,13 @@ const ProductDetails = () => {
     }
     try {
       await dispatch(addToCart({ productId, quantity })).unwrap();
-      alert(successMessage);
+      alert("Product added to cart successfully!", successMessage);
     } catch (error) {
-      alert(errorMessage, error);
+      alert(
+        "Failed to add product to cart. Please try again.",
+        errorMessage,
+        error
+      );
     }
   };
 
@@ -46,10 +55,10 @@ const ProductDetails = () => {
       {product ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           <div className="space-y-4">
-            {product.images.map((img) => (
-              <img
+            {product.images?.map((img) => (
+              <ProductImage
                 key={img.id}
-                src={img.imageUrl}
+                productId={img.id}
                 alt={product.name}
                 className="w-full rounded-lg shadow-md object-cover max-h-[500px]"
               />
@@ -78,17 +87,18 @@ const ProductDetails = () => {
 
               <div className="flex item-center gap-2">
                 <button
+                  type="button"
                   onClick={handleDecreaseQuantity}
                   disabled={productOutOfStock}
                   className="w-10 h-10 rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50 text-xl"
                 >
                   -
                 </button>
-
+                <span className="px-4 text-lg">{quantity}</span>
                 <button
                   onClick={handleIncreaseQuantity}
                   disabled={productOutOfStock}
-                  className="w-10 h-10 rounded-^d bg-gray-200 hover:bg-gray-300 disabled: opacity-5"
+                  className="w-10 h-10 rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50 text-xl"
                 >
                   +
                 </button>
@@ -97,6 +107,7 @@ const ProductDetails = () => {
 
             <div>
               <button
+                type="button"
                 onClick={handleAddToCart}
                 disabled={productOutOfStock}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
@@ -105,6 +116,7 @@ const ProductDetails = () => {
                 Add to cart
               </button>
               <button
+                type="button"
                 disabled={productOutOfStock}
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
               >

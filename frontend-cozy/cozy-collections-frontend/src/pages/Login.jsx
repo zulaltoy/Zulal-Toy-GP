@@ -35,7 +35,8 @@ const Login = () => {
     }),
     onSubmit: async (values,{setSubmitting,setErrors})=>{
         try{
-            await dispatch(login(values)).unwrap();
+            await dispatch(login({ email: values.email, password: values.password })).unwrap();
+           
         }catch{
             setErrors({general: authErrorMessage || "login failed"});
         }finally{

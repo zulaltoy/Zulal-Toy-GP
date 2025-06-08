@@ -11,22 +11,15 @@ export const getUserById = createAsyncThunk(
 );
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async ({ user, addresses }) => {
-    const payload = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: user.password,
-      addressList: addresses,
-    };
-    const response = await api.post("/users/add", payload);
+  async (values) => {
+    const response = await api.post("/users/add", values); // <-- sadece values gönder!
     return response.data;
   }
 );
 export const getCountryNames = createAsyncThunk(
     "user/getCountryNames",
     async()=>{
-        const response = await axios.get("https://restcountries.com/v3.1/all");
+        const response = await axios.get("https://restcountries.com/v3.1/all?fields=name,cca2");
         const countryNames = response.data.map((country) => country.name.common);
         return countryNames;
     }

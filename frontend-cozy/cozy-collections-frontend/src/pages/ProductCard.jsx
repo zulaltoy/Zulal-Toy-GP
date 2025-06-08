@@ -55,7 +55,7 @@ const ProductCard = ({products}) => {
             <p className="text-sm text-gray-500 line-clamp-2">
               {product.description}
             </p>
-            <p className="text-lg font-bold text-blue-600">${product.price}</p>
+            <p className="text-lg font-bold text-blue-600">€{product.price}</p>
 
             <StockStatus inventory={product.inventory} />
 

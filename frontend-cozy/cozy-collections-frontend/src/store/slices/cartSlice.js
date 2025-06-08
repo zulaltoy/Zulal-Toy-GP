@@ -8,8 +8,12 @@ export const addToCart = createAsyncThunk(
     const formData = new FormData();
     formData.append("productId", productId);
     formData.append("quantity", quantity);
-    const response = await privateApi.post("/cartItems/item/add", formData);
-    return response.data.data;
+    const response = await privateApi.post("/cartItems/cartItem/add", formData);
+   
+    return {
+      data: response.data.data,
+      message: response.data.message,
+    };
   }
 );
 export const getUserCart = createAsyncThunk(
@@ -23,7 +27,7 @@ export const updateQuantity = createAsyncThunk(
   "cart/updateQuantity",
   async ({ cartId, cartItemId, newQuantity }) => {
     await api.put(
-      `/cartItems/cart/${cartId}/item/${cartItemId}/update?quantity=${newQuantity}`
+      `/cartItems/cart/${cartId}/cartItem/${cartItemId}/update?quantity=${newQuantity}`
     );
     return { cartItemId, newQuantity };
   }
@@ -31,7 +35,7 @@ export const updateQuantity = createAsyncThunk(
 export const deleteItemFromCart = createAsyncThunk(
   "cart/deleteItemFromCart",
   async ({ cartId, cartItemId }) => {
-    await api.delete(`/cartItems/cart/${cartId}/item/${cartItemId}/delete`);
+    await api.delete(`/cartItems/cart/${cartId}/cartItem/${cartItemId}/delete`);
     return cartItemId;
   }
 );
@@ -55,8 +59,10 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.cartItems.push(action.payload.data);
-        state.successMessage = action.payload.message;
+        if (action.payload && action.payload.data) {
+          state.cartItems.push(action.payload.data);
+        }
+        state.successMessage = action.payload?.message;
       })
       .addCase(addToCart.rejected, (state, action) => {
         state.errorMessage = action.error.message;
@@ -65,15 +71,9 @@ const cartSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getUserCart.fulfilled, (state, action) => {
-        // state.cartItems = action.payload.cartItems;
-        // state.cartId = action.payload.cartId;
-        // state.totalAmount = action.payload.totalAmount;
-        // state.isLoading = false;
-        // state.errorMessage = null;
-        const cart = action.payload;
-
-        state.cartItems = cart.items || [];
-        state.cartId = cart.id;
+        const cart = action.payload || {};
+        state.cartItems = cart.cartItems || [];
+        state.cartId = cart.cartId || null;
         state.totalAmount = cart.totalAmount || 0;
         state.isLoading = false;
         state.errorMessage = null;
@@ -85,7 +85,7 @@ const cartSlice = createSlice({
       .addCase(updateQuantity.fulfilled, (state, action) => {
         const { cartItemId, newQuantity } = action.payload;
         const cartItem = state.cartItems.find(
-          (cartItem) => cartItem.id === cartItemId
+          (cartItem) => cartItem.product.id === cartItemId
         );
         if (cartItem) {
           cartItem.quantity = newQuantity;
@@ -99,7 +99,7 @@ const cartSlice = createSlice({
       .addCase(deleteItemFromCart.fulfilled, (state, action) => {
         const cartItemId = action.payload;
         state.cartItems = state.cartItems.filter(
-          (cartItem) => cartItem.id !== cartItemId
+          (cartItem) => cartItem.product.id !== cartItemId
         );
         state.totalAmount = state.cartItems.reduce(
           (total, cartItem) => total + cartItem.totalAmount,

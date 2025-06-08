@@ -25,11 +25,11 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:name" element={<Products />} />
         <Route
-          path="/products/category/:categoryId/products/"
+          path="/products/category/:categoryId/products"
           element={<Products />}
         />
         <Route
-          path="/product/:productId/details"
+          path="/product/:productId"
           element={<ProductDetails />}
         />
         <Route path="/register" element={<Register />} />

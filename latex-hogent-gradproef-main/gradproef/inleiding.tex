@@ -4,33 +4,42 @@
 
 \chapter{\IfLanguageName{dutch}{Inleiding}{Introduction}}%
 \label{ch:inleiding}
+De COVID-19-pandemie heeft de digitalisering in vele sectoren versneld. Vooral in de retailsector werd het belang van betrouwbare en veilige online betaalmethoden duidelijk. Kleine en middelgrote ondernemingen zagen zich genoodzaakt om digitale oplossingen te implementeren om hun klanten beter van dienst te kunnen zijn. In dit kader ontwikkelde ik een proof-of-concept van een e-commerceplatform met gebruikersauthenticatie, betalingsverwerking en productbeheer, gebruikmakend van Java Spring Boot en React.js.
 
-De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
+Het thema van dit onderzoek is het bouwen van een veilig en gebruiksvriendelijk e-commerceplatform met integratie van moderne technologieën. De doelgroep zijn kleine handelaars die op zoek zijn naar een betaalbare oplossing om hun producten online te verkopen.
 
-\begin{itemize}
-  \item context, achtergrond
-  \item afbakenen van het onderwerp
-  \item verantwoording van het onderwerp, methodologie
-  \item probleemstelling
-  \item onderzoeksdoelstelling
-  \item onderzoeksvraag
-  \item \ldots
-\end{itemize}
+Veel van deze kleine bedrijven beschikken niet over de technische kennis of middelen om zelf een platform te ontwikkelen. Bestaande oplossingen zijn vaak te duur of niet flexibel genoeg. De centrale onderzoeksvraag is dan ook: \textbf{Hoe kan een veilige en functionele e-commerceoplossing worden ontwikkeld voor kleine handelaars, gebruikmakend van Java Spring Boot en React, met integratie van een moderne betaalmethode zoals Stripe?}
+
+Het doel van dit onderzoek is om een werkend prototype te bouwen dat voldoet aan de belangrijkste behoeften van kleine online verkopers: gebruikersauthenticatie (via JWT), productbeheer, en veilige online betalingen (via Stripe). Dit prototype zal dienen als bewijs dat dergelijke technologieën toegankelijk en toepasbaar zijn in een praktische casus.
+
+
 
 \section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
 \label{sec:probleemstelling}
+Veel kleine bedrijven willen hun producten online verkopen, maar hebben niet genoeg technische kennis om een veilige en functionele webshop te laten ontwikkelen. Bestaande platformen zijn vaak duur of te complex. Er is dus nood aan een eenvoudig, uitbreidbaar en betaalbaar e-commerceplatform op maat van kleinere handelaars. Deze graduaatsproef richt zich op het ontwikkelen van zo’n oplossing.
 
-Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's'', systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+
 
 \section{\IfLanguageName{dutch}{Onderzoeksvraag}{Research question}}%
 \label{sec:onderzoeksvraag}
+Hoe kan een veilige en functionele e-commerceoplossing worden ontwikkeld voor kleine handelaars, gebruikmakend van Java Spring Boot en React, met integratie van een moderne betaalmethode zoals Stripe?
 
-Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+
 
 \section{\IfLanguageName{dutch}{Onderzoeksdoelstelling}{Research objective}}%
 \label{sec:onderzoeksdoelstelling}
 
-Wat is het beoogde resultaat van je graduaatsproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk. Gaat het bv.\ om een proof-of-concept, een prototype, een verslag met aanbevelingen, een vergelijkende studie, enz.
+Het doel van deze bachelorproef is het ontwikkelen van een proof-of-concept van een e-commerceplatform dat de volgende functies ondersteunt:
+
+Gebruikersregistratie en -authenticatie via JWT
+
+Productbeheer
+
+Verwerking van online betalingen via Stripe
+
+Het eindresultaat moet een werkend prototype zijn dat als basis kan dienen voor verdere ontwikkeling of integratie in bestaande systemen.
+
+
 
 \section{\IfLanguageName{dutch}{Opzet van deze graduaatsproef}{Structure of this associate thesis}}%
 \label{sec:opzet-graduaatsproef}
@@ -41,10 +50,12 @@ Wat is het beoogde resultaat van je graduaatsproef? Wat zijn de criteria voor su
 
 De rest van deze graduaatsproef is als volgt opgebouwd:
 
-In Hoofdstuk~\ref{ch:stand-van-zaken} wordt een overzicht gegeven van de stand van zaken binnen het onderzoeksdomein, op basis van een literatuurstudie.
+In Hoofdstuk~\ref{ch:stand-van-zaken}  wordt de stand van zaken besproken, inclusief relevante technologieën zoals Java Spring Boot, React, JWT en Stripe.
 
-In Hoofdstuk~\ref{ch:methodologie} wordt de methodologie toegelicht en worden de gebruikte onderzoekstechnieken besproken om een antwoord te kunnen formuleren op de onderzoeksvragen.
+In Hoofdstuk~\ref{ch:methodologie}  wordt de methodologie uitgelegd: hoe het project werd aangepakt, welke tools gebruikt werden, en hoe het ontwikkelingsproces verliep.
 
 % TODO: Vul hier aan voor je eigen hoofstukken, één of twee zinnen per hoofdstuk
 
-In Hoofdstuk~\ref{ch:conclusie}, tenslotte, wordt de conclusie gegeven en een antwoord geformuleerd op de onderzoeksvragen. Daarbij wordt ook een aanzet gegeven voor toekomstig onderzoek binnen dit domein.
+
+
+In Hoofdstuk~\ref{ch:conclusie}, volgt een conclusie en aanbevelingen voor toekomstig onderzoek of uitbreiding van het platform.

@@ -2,7 +2,7 @@
 %% Methodologie
 %%=============================================================================
 
-\chapter{\IfLanguageName{dutch}{Methodologie}{Methodology}}%
+\chapter{\IfLanguageName{dutch}{Methodologie}{Methodology}}
 \label{ch:methodologie}
 
 %% TODO: In dit hoofstuk geef je een korte toelichting over hoe je te werk bent
@@ -26,5 +26,48 @@
 %% Maak voor elke fase (behalve het literatuuronderzoek) een NIEUW HOOFDSTUK aan
 %% en geef het een gepaste titel.
 
-\lipsum[21-25]
+In dit hoofdstuk geef ik een overzicht van de werkwijze die ik gevolgd heb tijdens de uitvoering van mijn project. Ik verdeel mijn werk in vijf grote fasen: literatuurstudie, requirementsanalyse, proof-of-concept, implementatie en testfase. Per fase geef ik de doelstelling, gebruikte onderzoeksmethoden, en de belangrijkste deliverables.
 
+\section{Literatuurstudie}
+
+\textbf{Doelstelling:} Voor de start van het project wilde ik onderzoeken welke programmeertalen en technologieën populair zijn in België, zodat ik een weloverwogen keuze kon maken voor mijn eindproject.
+
+\textbf{Onderzoeksmethode:} Ik heb online gezocht naar de meest gebruikte technologieën in de Belgische arbeidsmarkt. Vervolgens heb ik besloten om Java te leren, omdat het een veelgebruikte taal is in combinatie met Spring Boot. Ik heb YouTube-video’s bekeken zoals “Java tutorials for beginners” om de basis te begrijpen. Daarna heb ik een inleidende cursus gevolgd via Udemy over Java Spring Boot. Tijdens het leren merkte ik dat de syntaxis op sommige punten leek op C\#/.NET, maar het was toch complexer dan verwacht.
+
+Daarnaast heb ik bij moeilijkheden regelmatig gebruikgemaakt van de officiële Spring Boot-documentatie en ondersteuning gezocht via ChatGPT. Ook heb ik meerdere YouTube-video’s bekeken over het bouwen van e-commerceplatformen, en aanvullende lessen gevolgd op Udemy specifiek over dat onderwerp.
+
+\textbf{Deliverable:} Basiskennis van Java en Spring Boot, en een goed inzicht in de uitdagingen die gepaard gaan met het bouwen van een e-commerceplatform.
+
+\section{Requirementsanalyse}
+
+\textbf{Doelstelling:} Een overzicht maken van alle noodzakelijke functionaliteiten voor het project, zowel voor de eindgebruiker als voor de beheerder.
+
+\textbf{Onderzoeksmethode:} Ik heb op basis van bestaande e-commerceplatformen en persoonlijke inzichten een lijst opgesteld met de vereiste functies: gebruikersregistratie, productbeheer, winkelmandje, betalingen, en een adminpaneel.
+
+\textbf{Deliverable:} Een functionele analyse met de belangrijkste componenten en een algemeen overzicht van het systeemontwerp.
+
+\section{Proof-of-Concept (PoC)}
+
+\textbf{Doelstelling:} Testen of JWT-authenticatie correct werkt in de backend.
+
+\textbf{Onderzoeksmethode:} Ik heb JWT geïntegreerd in de backend en handmatig getest via Postman. Ik heb gecontroleerd of access tokens en refresh tokens correct gegenereerd en gevalideerd worden.
+
+\textbf{Deliverable:} Een werkende authenticatiestructuur met JWT in de backend.
+
+\section{Implementatie}
+
+\textbf{Doelstelling:} Het ontwikkelen van de backend en frontend van het e-commerceplatform.
+
+\textbf{Onderzoeksmethode:} Ik ben begonnen met de backend in Spring Boot. Tijdens het bouwen van de frontend in React merkte ik dat er nog hiaten waren in de backend, wat leidde tot terugkerende aanpassingen. De frontend-ontwikkeling verliep moeizamer dan verwacht, met onverwachte bugs en integratieproblemen. Vooral het correct implementeren van Stripe voor betalingen was uitdagend, dus dat heb ik tot het laatst uitgesteld.
+
+Ik vond het leerproces intensief; Java Spring Boot was moeilijker dan ik oorspronkelijk had ingeschat, en het opzetten van een volledig e-commerceplatform bleek een complex en tijdrovend proces.
+
+\textbf{Deliverable:} Een grotendeels afgewerkt e-commerceplatform met gebruikersauthenticatie, productbeheer, winkelmandje, betalingssysteem en beheerpaneel.
+
+\section{Testfase}
+
+\textbf{Doelstelling:} Verifiëren of alle functionaliteiten correct werken en robuust zijn.
+
+\textbf{Onderzoeksmethode:} Ik heb manuele testen uitgevoerd via Postman en via de frontendinterface. Ik testte login, access/refresh tokens, endpoints voor producten, gebruikers en categorieën, en winkelmandfunctionaliteiten. Problemen en bugs werden waar nodig opgelost.
+
+\textbf{Deliverable:} Een geteste en functionerende applicatie met de belangrijkste functionaliteiten succesvol geïmplementeerd.
