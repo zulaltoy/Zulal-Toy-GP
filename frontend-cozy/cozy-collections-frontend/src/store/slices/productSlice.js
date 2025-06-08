@@ -96,6 +96,7 @@ const productSlice = createSlice({
       })
       .addCase(getProductById.fulfilled, (state, action) => {
         state.product = action.payload;
+         state.quantity = 1;
         state.isLoading = false;
       })
 

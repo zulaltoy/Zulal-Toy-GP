@@ -17,11 +17,9 @@ const UserRegistration = () => {
     addresses: [
       {
         country: "",
-        state: "",
         city: "",
         street: "",
-        mobileNumber: "",
-        addressType: "HOME",
+        zip: "",
       },
     ],
   };
@@ -34,11 +32,10 @@ const UserRegistration = () => {
     addresses: Yup.array().of(
       Yup.object().shape({
         country: Yup.string().required("Required"),
-        state: Yup.string().required("Required"),
         city: Yup.string().required("Required"),
         street: Yup.string().required("Required"),
-        mobileNumber: Yup.string().required("Required"),
-        addressType: Yup.string().required("Required"),
+        zip: Yup.string().required("Required"),
+        
       })
     ),
   });
@@ -140,11 +137,10 @@ const UserRegistration = () => {
                     onClick={() =>
                       push({
                         country: "",
-                        state: "",
+                      
                         city: "",
                         street: "",
-                        mobileNumber: "",
-                        addressType: "HOME",
+                        zip: "",
                       })
                     }
                     className="mt-2 text-blue-600 underline"

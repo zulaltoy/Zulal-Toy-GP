@@ -44,10 +44,10 @@ const AddressForm = ({ index, removeAddress }) => {
         </div>
 
         <div>
-          <label className="block mb-1">State</label>
+          <label className="block mb-1">Zip</label>
           <input
-            name={`${prefix}.state`}
-            value={values.addresses[index].state}
+            name={`${prefix}.zip`}
+            value={values.addresses[index].zip}
             onChange={handleChange}
             className="w-full border p-2 rounded"
           />

@@ -14,7 +14,7 @@ const Hero = () => {
       
       <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-center px-4 z-10">
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-          Welcome to <span className="text-yellow-400">CozyCollections</span>.com
+           <span className="text-yellow-400">CozyCollections</span>.com
         </h1>
         <SearchBar />
       </div>

@@ -7,45 +7,54 @@
 
 % Pas na deze inleidende paragraaf komt de eerste sectiehoofding.
 
-Dit hoofdstuk bevat je literatuurstudie. De inhoud gaat verder op de inleiding, maar zal het onderwerp van de graduaatsproef *diepgaand* uitspitten. De bedoeling is dat de lezer na lezing van dit hoofdstuk helemaal op de hoogte is van de huidige stand van zaken (state-of-the-art) in het onderzoeksdomein. Iemand die niet vertrouwd is met het onderwerp, weet nu voldoende om de rest van het verhaal te kunnen volgen, zonder dat die er nog andere informatie moet over opzoeken \autocite{Pollefliet2011}.
+In dit hoofdstuk wordt de literatuurstudie besproken over technologieën die essentieel zijn voor het ontwikkelen van een modern e-commerceplatform. De focus ligt op gebruikersauthenticatie met JWT, sessiebeheer via refresh tokens, en de integratie van betalingen via Stripe. Deze componenten vormen de basis van het project.
 
-Je verwijst bij elke bewering die je doet, vakterm die je introduceert, enz.\ naar je bronnen. In \LaTeX{} kan dat met het commando \texttt{$\backslash${textcite\{\}}} of \texttt{$\backslash${autocite\{\}}}. Als argument van het commando geef je de ``sleutel'' van een ``record'' in een bibliografische databank in het Bib\LaTeX{}-formaat (een tekstbestand). Als je expliciet naar de auteur verwijst in de zin (narratieve referentie), gebruik je \texttt{$\backslash${}textcite\{\}}. Soms is de auteursnaam niet expliciet een onderdeel van de zin, dan gebruik je \texttt{$\backslash${}autocite\{\}} (referentie tussen haakjes). Dit gebruik je bv.~bij een citaat, of om in het bijschrift van een overgenomen afbeelding, broncode, tabel, enz. te verwijzen naar de bron. In de volgende paragraaf een voorbeeld van elk.
+\section{Gebruikersauthenticatie met JWT}
 
-\textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
+JWT (JSON Web Token) is een open standaard (RFC 7519) die een compacte en veilige manier biedt om informatie tussen twee partijen uit te wisselen \autocite{Jones2015}. JWT bestaat uit drie delen: een header, een payload en een signature. Deze tokens worden vaak gebruikt voor stateless authenticatie in webapplicaties.
 
-Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je verwijst meteen naar een bron in de eerste zin die erop gebaseerd is, dus niet pas op het einde van een paragraaf.
+Wanneer een gebruiker succesvol inlogt, genereert de server twee tokens:
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.8\textwidth]{grail.jpg}
-  \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
-\end{figure}
+\begin{itemize}
+\item Een \textbf{access token}, dat een korte levensduur heeft en bij elke API-aanroep wordt meegestuurd in de \texttt{Authorization} header.
+\item Een \textbf{refresh token}, dat een langere levensduur heeft en wordt gebruikt om nieuwe access tokens aan te vragen zonder dat de gebruiker opnieuw hoeft in te loggen.
+\end{itemize}
 
-\begin{listing}
-  \begin{minted}{python}
-    import pandas as pd
-    import seaborn as sns
 
-    penguins = sns.load_dataset('penguins')
-    sns.relplot(data=penguins, x="flipper_length_mm", y="bill_length_mm", hue="species")
-  \end{minted}
-  \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
-\end{listing}
+In dit project wordt het refresh token \textbf{niet} opgeslagen in een \texttt{HttpOnly} cookie, maar aan de clientzijde (bijvoorbeeld in \texttt{localStorage} of \texttt{sessionStorage}), zoals blijkt uit de configuratie \texttt{api.useSecureCookie=false}. Dit brengt extra aandacht met zich mee voor de beveiliging van de frontend-opslag om risico’s zoals XSS-aanvallen te beperken \autocite{OWASP2021}.
 
-\lipsum[7-20]
+\section{Access- versus Refresh tokens}
 
-\begin{table}
-  \centering
-  \begin{tabular}{lcr}
-    \toprule
-    \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
-    $\alpha$         & $\beta$          & $\gamma$         \\
-    \midrule
-    A                & 10.230           & a                \\
-    B                & 45.678           & b                \\
-    C                & 99.987           & c                \\
-    \bottomrule
-  \end{tabular}
-  \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
+Het gebruik van twee soorten tokens biedt een goede balans tussen veiligheid en gebruiksgemak. Access tokens verlopen snel, waardoor ze minder risico vormen bij diefstal. Refresh tokens worden uitsluitend gebruikt om nieuwe access tokens op te halen.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l l}
+\toprule
+\textbf{Token type} & \textbf{Kenmerken} \\
+\midrule
+Access token & Korte levensduur (bijvoorbeeld 5 minuten), voor API-toegang \\
+Refresh token & Lange levensduur (bijvoorbeeld 30 dagen), opgeslagen aan de clientzijde \\
+\bottomrule
+\end{tabular}
+\caption[Verschillen tussen access en refresh tokens.]{Overzicht van de belangrijkste verschillen tussen access- en refresh tokens.}
 \end{table}
 
+
+\section{Betalingen via Stripe}
+
+Stripe is een populaire betalingsprovider met een sterke focus op developer-vriendelijkheid. De Stripe API ondersteunt onder meer betalingen met kredietkaart, Apple Pay en Google Pay \autocite{StripeDocs2024}. In dit project wordt Stripe gebruikt om veilige en betrouwbare betalingen te integreren.
+
+% \begin{listing}[h]
+% \begin{verbatim}
+% Voorbeeld van het starten van een Stripe checkout sessie
+% const stripe = await getStripe();
+% const { error } = await stripe.redirectToCheckout({ sessionId });
+% \end{verbatim}
+% \caption[Voorbeeld Stripe-integratie in React]{Codevoorbeeld van Stripe-integratie met React frontend.}
+% \end{listing}
+
+
+\section{Vergelijkbare systemen en best practices}
+
+Platformen zoals Shopify en WooCommerce tonen aan dat een combinatie van JWT-authenticatie, correct beheer van refresh tokens, en betaalintegratie via Stripe een veelgebruikte architectuur is in moderne webshops \autocite{BaeldungJWT,StripeDocs2024}. Best practices benadrukken dat refresh tokens, indien ze niet via \texttt{HttpOnly} cookies worden opgeslagen, op een veilige manier moeten worden beheerd en uitsluitend via beveiligde verbindingen (HTTPS) verzonden moeten worden \autocite{OWASP2021}.

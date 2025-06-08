@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserCart } from "../store/slices/cartSlice";
 import { logout } from "../store/slices/authSlice";
@@ -7,8 +7,11 @@ import { FaShoppingCart } from "react-icons/fa";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   const userId = localStorage.getItem("userId");
   const cart = useSelector((state) => state.cart);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -18,7 +21,20 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/");
+    
   };
+
+  
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (!e.target.closest(".account-dropdown")) setDropdownOpen(false);
+    };
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClick);
+    }
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [dropdownOpen]);
 
   return (
     <nav className="bg-white shadow sticky top-0 z-50">
@@ -51,11 +67,18 @@ const Navbar = () => {
           )}
 
          
-          <div className="relative group">
-            <button className="text-gray-800 font-medium focus:outline-none">
+          <div className="relative account-dropdown">
+            <button
+              className="text-gray-800 font-medium focus:outline-none"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+            >
               Account ▾
             </button>
-            <div className="absolute right-0 hidden group-hover:block bg-white shadow-lg rounded mt-2 w-44 z-10">
+            <div
+              className={`absolute right-0 bg-white shadow-lg rounded mt-2 w-44 z-10 transition-all duration-200 ${
+                dropdownOpen ? "block" : "hidden"
+              }`}
+            >
               {userId ? (
                 <>
                   <Link

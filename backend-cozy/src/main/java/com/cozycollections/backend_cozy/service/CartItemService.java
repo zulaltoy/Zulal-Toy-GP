@@ -1,5 +1,6 @@
 package com.cozycollections.backend_cozy.service;
 
+import com.cozycollections.backend_cozy.dtos.CartItemDto;
 import com.cozycollections.backend_cozy.model.Cart;
 import com.cozycollections.backend_cozy.model.CartItem;
 import com.cozycollections.backend_cozy.model.Product;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +24,7 @@ public class CartItemService implements ICartItemService {
     private final IProductService productService;
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public CartItem getCartItem(Long cartId, Long productId) {
@@ -42,7 +45,7 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
-    public void addCartItemToCart(Long cartId, Long productId, int quantity) {
+    public CartItem addCartItemToCart(Long cartId, Long productId, int quantity) {
 
         Cart cart = cartService.getCartByCartId(cartId);
         Product product = productService.getProductById(productId);
@@ -62,6 +65,7 @@ public class CartItemService implements ICartItemService {
         cart.addItem(cartItem);
         cartItemRepository.save(cartItem);
         cartRepository.save(cart);
+        return cartItem;
     }
 
     @Override
@@ -82,4 +86,6 @@ public class CartItemService implements ICartItemService {
     cartRepository.save(cart);
  
     }
+    @Override
+    public CartItemDto convertToCartItemDto(CartItem cartItem) {return modelMapper.map(cartItem, CartItemDto.class);}
 }

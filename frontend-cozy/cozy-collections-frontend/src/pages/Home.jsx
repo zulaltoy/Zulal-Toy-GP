@@ -68,7 +68,7 @@ const Home = () => {
               key={product.id}
               className="w-full sm:w-[300px] border border-gray-200 rounded-lg shadow hover:shadow-lg transition duration-300"
             >
-              <Link to={`/products/${product.name}`}>
+              <Link to={`/product/${product.id}`}>
                 <div className="h-48 overflow-hidden flex justify-center items-center bg-gray-100 rounded-t-lg">
                   {product.images.length > 0 && (
                     <ProductImage productId={product.images[0].id} />
@@ -83,7 +83,7 @@ const Home = () => {
                 <h4 className="text-blue-600 font-semibold">${product.price}</h4>
                 <StockStatus inventory={product.inventory} />
                 <Link
-                  to={`/products/${product.name}`}
+                  to={`/product/${product.id}`}
                   className="inline-block mt-2 px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition"
                 >
                   Shop now
