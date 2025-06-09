@@ -43,7 +43,7 @@ const ProductCard = ({products}) => {
         <div key={product.id} 
         className="border rounded-lg shadow hover:shadow-md transition duration-300 p-3 bg-white flex flex-col justify-between"
       >
-        <Link to={`/product/${product.id}/details`} className="block mb-2">
+        <Link to={`/product/${product.id}`} className="block mb-2">
         {product.images.length > 0 &&
         (
             <ProductImage productId={product.images[0].id}/>
@@ -55,7 +55,7 @@ const ProductCard = ({products}) => {
             <p className="text-sm text-gray-500 line-clamp-2">
               {product.description}
             </p>
-            <p className="text-lg font-bold text-blue-600">€{product.price}</p>
+            <p className="text-lg font-bold text-blue-600">${product.price}</p>
 
             <StockStatus inventory={product.inventory} />
 
@@ -78,7 +78,7 @@ const ProductCard = ({products}) => {
                 </>
               )}
               <Link 
-              to={`/product/${product.id}/details`}
+              to={`/product/${product.id}`}
               className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm ml-auto">
                 Add to cart
               </Link>

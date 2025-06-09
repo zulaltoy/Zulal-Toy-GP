@@ -72,7 +72,7 @@ const cartSlice = createSlice({
       })
       .addCase(getUserCart.fulfilled, (state, action) => {
         const cart = action.payload || {};
-        state.cartItems = cart.cartItems || [];
+        state.cartItems = cart.items || [];
         state.cartId = cart.cartId || null;
         state.totalAmount = cart.totalAmount || 0;
         state.isLoading = false;
@@ -85,11 +85,11 @@ const cartSlice = createSlice({
       .addCase(updateQuantity.fulfilled, (state, action) => {
         const { cartItemId, newQuantity } = action.payload;
         const cartItem = state.cartItems.find(
-          (cartItem) => cartItem.product.id === cartItemId
+          (cartItem) => cartItem.cartItemId === cartItemId
         );
         if (cartItem) {
           cartItem.quantity = newQuantity;
-          cartItem.totalAmount = cartItem.product.price * newQuantity;
+          cartItem.totalAmount = cartItem.unitPrice * newQuantity;
         }
         state.totalAmount = state.cartItems.reduce(
           (total, cartItem) => total + cartItem.totalAmount,
@@ -99,7 +99,7 @@ const cartSlice = createSlice({
       .addCase(deleteItemFromCart.fulfilled, (state, action) => {
         const cartItemId = action.payload;
         state.cartItems = state.cartItems.filter(
-          (cartItem) => cartItem.product.id !== cartItemId
+          (cartItem) => cartItem.cartItemId !== cartItemId
         );
         state.totalAmount = state.cartItems.reduce(
           (total, cartItem) => total + cartItem.totalAmount,

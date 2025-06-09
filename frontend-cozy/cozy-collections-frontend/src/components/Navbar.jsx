@@ -46,12 +46,7 @@ const Navbar = () => {
 
       
         <div className="flex items-center space-x-6">
-          <Link
-            to="/products"
-            className="text-base font-medium text-gray-700 hover:text-blue-600 transition"
-          >
-            All Products
-          </Link>
+       
 
          
           {userId && (

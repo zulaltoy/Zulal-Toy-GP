@@ -1,7 +1,10 @@
 package com.cozycollections.backend_cozy.service;
 
 import com.cozycollections.backend_cozy.dtos.UserDto;
+import com.cozycollections.backend_cozy.model.Role;
 import com.cozycollections.backend_cozy.model.User;
+import com.cozycollections.backend_cozy.repository.AddressRepository;
+import com.cozycollections.backend_cozy.repository.RoleRepository;
 import com.cozycollections.backend_cozy.repository.UserRepository;
 import com.cozycollections.backend_cozy.request.CreateUserRequest;
 import com.cozycollections.backend_cozy.request.UserUpdateRequest;
@@ -16,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,8 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
+    private final AddressRepository addressRepository;
 
     @Override
     public User getUserById(Long userId) {
@@ -32,6 +38,9 @@ public class UserService implements IUserService {
 
     @Override
     public User createUser(CreateUserRequest userRequest) {
+        Role userRole = Optional.ofNullable(roleRepository.findByName("ROLE_USER"))
+                .orElseThrow(()->new EntityNotFoundException("Role not found"));
+
         return Optional.of(userRequest)
                 .filter(user -> !userRepository.existsByEmail(userRequest.getEmail()))
                 .map( req -> {
@@ -40,9 +49,18 @@ public class UserService implements IUserService {
                     user.setLastName(userRequest.getLastName());
                     user.setEmail(userRequest.getEmail());
                     user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-                    return userRepository.save(user);
-                }).orElseThrow(()-> new EntityExistsException(userRequest.getEmail() + "already exists!"));
+                    user.setRoles(Set.of(userRole));
+                    User savedUser = userRepository.save(user);
+                    Optional.ofNullable(req.getAddresses()).ifPresent(addresses -> {
+                        addresses.forEach(address -> {
+                            address.setUser(savedUser);
+                            addressRepository.save(address);
 
+                        });
+                    });
+                    return savedUser;
+                }).orElseThrow(() ->
+                        new EntityExistsException("Oops! " + userRequest.getEmail() + " already exists!"));
     }
 
     @Override
