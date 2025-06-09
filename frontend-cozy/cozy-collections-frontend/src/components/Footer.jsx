@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { FaFacebookF,FaTwitter, FaInstagram} from "react-icons/fa";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getAllCategories } from '../store/slices/categorySlice';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const dispatch= useDispatch();
-  const categories = useSelector((state)=>state.category.categories);
+  
 
   useEffect(()=>{
     dispatch(getAllCategories());
@@ -21,17 +21,6 @@ const Footer = () => {
         <p className="text-sm text-gray-400">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Category</h3>
-        <ul className="text-sm text-gray-400 space-y-1">
-        {Array.isArray(categories) && categories.map((category,index)=>{
-          <li key={index}>
-           <Link to={`/products/category/${category.id}/products`}>{category.id}</Link> </li>
-          //  <Link to={`/products/category/${category.id}/products`}>{category.name}</Link> </li>
-        })}
-        </ul>
       </div>
 
       <div>

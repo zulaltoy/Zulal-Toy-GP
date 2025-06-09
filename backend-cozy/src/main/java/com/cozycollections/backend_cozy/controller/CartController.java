@@ -1,5 +1,6 @@
 package com.cozycollections.backend_cozy.controller;
 
+import com.cozycollections.backend_cozy.dtos.CartDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,8 @@ public class CartController {
     @GetMapping("/user/{userId}/cart")
     public ResponseEntity<ApiResponse> getUserCart(@PathVariable Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
-        return ResponseEntity.ok(new ApiResponse("Fetched cart successfully", cart));
+        CartDto cartDto = cartService.convertCartToDto(cart);
+        return ResponseEntity.ok(new ApiResponse("Fetched cart successfully", cartDto));
     }
 
     @DeleteMapping("/cart/{cartId}/clear")

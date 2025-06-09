@@ -9,6 +9,7 @@ import {
 } from "../store/slices/cartSlice";
 import { placeOrder } from "../store/slices/orderSlice";
 import ProductImage from "../utils/ProductImage";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const { userId } = useParams();
@@ -22,39 +23,39 @@ const Cart = () => {
     dispatch(getUserCart(userId));
   }, [dispatch, userId]);
 
-  const handleIncreaseQuantity = (itemId) => {
-    const item = cart.items.find((item) => item.product.id === itemId);
-
+  const handleIncreaseQuantity = (cartItemId) => {
+    const item = cart.cartItems.find((item) => item.cartItemId === cartItemId);
     if (item && cartId) {
       dispatch(
         updateQuantity({
           cartId,
-          itemId,
+          cartItemId,
           newQuantity: item.quantity + 1,
         })
       );
     }
   };
-  const handleDecreaseQuantity = (itemId) => {
-    const item = cart.item.find((item) => item.product.id === itemId);
+
+  const handleDecreaseQuantity = (cartItemId) => {
+    const item = cart.cartItems.find((item) => item.cartItemId === cartItemId); // DÜZELTİLDİ
     if (item && item.quantity > 1) {
       dispatch(
         updateQuantity({
           cartId,
-          itemId,
+          cartItemId,
           newQuantity: item.quantity - 1,
         })
       );
     }
   };
 
-  const handleDeleteItem = (itemId) => {
-    dispatch(deleteItemFromCart({ cartId, itemId }));
+  const handleDeleteItem = (cartItemId) => {
+    dispatch(deleteItemFromCart({ cartId, cartItemId }));
     alert("Item removed from the cart");
   };
 
   const handlePlaceOrder = async () => {
-    if (cart.items.length > 0) {
+    if (cart.cartItems.length > 0) {
       try {
         const result = await dispatch(placeOrder(userId)).unwrap();
         dispatch(clearCart());
@@ -76,7 +77,7 @@ const Cart = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-4 mt-10">
-      {cart.items.length === 0 ? (
+      {cart.cartItems.length === 0 ? (
         <h3 className="text-2xl font-semibold mb-4">Your cart is empty</h3>
       ) : (
         <div className="flex flex-col">
@@ -90,7 +91,7 @@ const Cart = () => {
             <div>Action</div>
           </div>
 
-          {cart.items.map((item, index) => (
+          {cart.cartItems.map((item, index) => (
             <div
               key={index}
               className="grid grid-cols-7 gap-2 items-center text-center border p-4 rounded-lg shadow-sm mb-4"
@@ -109,14 +110,14 @@ const Cart = () => {
 
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => handleDecreaseQuantity(item.product.id)}
+                  onClick={() => handleDecreaseQuantity(item.cartItemId)}
                   className="bg-gray-300 hover:bg-gray-400 text-black px-2 py-1 rounded"
                 >
                   -
                 </button>
                 <span className="px-2">{item.quantity}</span>
                 <button
-                  onClick={() => handleIncreaseQuantity(item.product.id)}
+                  onClick={() => handleIncreaseQuantity(item.cartItemId)}
                   className="bg-gray-300 hover:bg-gray-400 text-black px-2 py-1 rounded"
                 >
                   +
@@ -125,7 +126,7 @@ const Cart = () => {
               <div>${item.totalPrice.toFixed(2)}</div>
               <div>
                 <button
-                  onClick={() => handleDeleteItem(item.product.id)}
+                  onClick={() => handleDeleteItem(item.cartItemId)}
                   className="text-red-600 hover:underline"
                 >
                   Remove

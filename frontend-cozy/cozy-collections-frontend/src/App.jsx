@@ -14,6 +14,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UnauthorizedPage from "./utils/Unauthorized";
 
 function App() {
   const router = createBrowserRouter(
@@ -50,6 +51,7 @@ function App() {
           />
         </Route>
 
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
         
       </Route>
     )
