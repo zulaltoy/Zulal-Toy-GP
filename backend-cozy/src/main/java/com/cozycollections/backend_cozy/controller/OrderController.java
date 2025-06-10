@@ -30,9 +30,8 @@ public class OrderController {
 
     @PostMapping("/user/{userId}/place-order")
     public ResponseEntity<ApiResponse> createOrder(@PathVariable Long userId) {
-        Order order = orderService.placeOrder(userId);
-        OrderDto orderDto = orderService.convertOrderToDto(order);
-        return ResponseEntity.ok(new ApiResponse("Order placed successfully", orderDto));
+        List<OrderDto> orderList = orderService.getUserOrders(userId);
+        return ResponseEntity.ok(new ApiResponse("Order placed successfully", orderList));
     }
 
     @PostMapping("/create-payment-intent")

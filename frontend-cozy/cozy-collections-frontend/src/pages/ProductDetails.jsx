@@ -68,7 +68,7 @@ const ProductDetails = () => {
           <div className="space-y-4">
             <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
             <h2 className="text-2xl text-blue-600 font-semibold">
-              ${product.price}
+             €{product.price}
             </h2>
             <p className="text-gray-700">{product.description}</p>
 

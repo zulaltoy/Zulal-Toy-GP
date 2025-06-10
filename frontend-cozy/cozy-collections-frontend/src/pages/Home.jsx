@@ -80,7 +80,7 @@ const Home = () => {
                   {product.name}
                 </p>
                 <p className="text-sm text-gray-600">{product.description}</p>
-                <h4 className="text-blue-600 font-semibold">${product.price}</h4>
+                <h4 className="text-blue-600 font-semibold">€{product.price}</h4>
                 <StockStatus inventory={product.inventory} />
                 <Link
                   to={`/product/${product.id}`}

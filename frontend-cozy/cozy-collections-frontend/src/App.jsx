@@ -4,6 +4,8 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 import Home from "./pages/Home";
 import RootLayout from "./layouts/RootLayout";
@@ -15,6 +17,9 @@ import Cart from "./pages/Cart";
 import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UnauthorizedPage from "./utils/Unauthorized";
+import Checkout from "./pages/Checkout";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY); 
 
 function App() {
   const router = createBrowserRouter(
@@ -52,6 +57,14 @@ function App() {
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route
+          path="/checkout/:userId/checkout"
+          element={
+            <Elements stripe={stripePromise}>
+              <Checkout />
+            </Elements>
+          }
+        />
         
       </Route>
     )

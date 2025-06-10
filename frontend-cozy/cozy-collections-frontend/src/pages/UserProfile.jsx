@@ -12,6 +12,7 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const { userId } = useParams();
   const user = useSelector((state) => state.user.user);
+   const orders = useSelector((state) => state.order.orders);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState(null);
@@ -97,12 +98,14 @@ const UserProfile = () => {
     dispatch(getUserOrders(userId));
   }, [dispatch, userId]);
 
+ 
+
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-semibold mb-6">User Dashboard</h2>
       {user ? (
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Personal Info */}
+          
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-medium mb-4 border-b pb-2">Personal Information</h3>
             <div className="flex flex-col items-center text-center space-y-3">
@@ -116,7 +119,7 @@ const UserProfile = () => {
             </div>
           </div>
 
-          {/* Address Section */}
+         
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-medium mb-4 border-b pb-2">Addresses</h3>
             <div className="space-y-4">
@@ -150,7 +153,7 @@ const UserProfile = () => {
               )}
             </div>
 
-            {/* Add Address Button + Form */}
+            
             <div className="mt-4">
               <button
                 onClick={() => { setShowForm(true); setIsEditing(false); }}
@@ -170,6 +173,76 @@ const UserProfile = () => {
                 </div>
               )}
             </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-medium mb-4 border-b pb-2">Orders History</h3>
+            {Array.isArray(orders) && orders.length === 0 ? (
+              <p className="text-gray-600">No orders found at the moment.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm text-left border">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="py-2 px-3 border">Order ID</th>
+                      <th className="py-2 px-3 border">Date</th>
+                      <th className="py-2 px-3 border">Total Amount</th>
+                      <th className="py-2 px-3 border">Order Status</th>
+                      <th className="py-2 px-3 border">Items</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Array.isArray(orders) &&
+                      orders.map((order) => (
+                        <tr key={order.id}>
+                          <td className="py-2 px-3 border">{order?.id}</td>
+                          <td className="py-2 px-3 border">
+                            {order?.orderDate
+                              ? new Date(order.orderDate).toLocaleDateString()
+                              : "-"}
+                          </td>
+                          <td className="py-2 px-3 border">€{order?.totalAmount?.toFixed(2)}</td>
+                          <td className="py-2 px-3 border">{order?.orderStatus}</td>
+                          <td className="py-2 px-3 border">
+                            <table className="min-w-full text-xs border">
+                              <thead>
+                                <tr>
+                                  <th className="py-1 px-2 border">Item ID</th>
+                                  <th className="py-1 px-2 border">Name</th>
+                                
+                                  <th className="py-1 px-2 border">Quantity</th>
+                                  <th className="py-1 px-2 border">Unit Price</th>
+                                  <th className="py-1 px-2 border">Total Price</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {Array.isArray(order?.items) &&
+                                  order.items.map((item, idx) => (
+                                    <tr key={idx}>
+                                      <td className="py-1 px-2 border">{item.productId}</td>
+                                      <td className="py-1 px-2 border">{item.productName}</td>
+                                    
+                                      <td className="py-1 px-2 border">{item.quantity}</td>
+                                      <td className="py-1 px-2 border">€{item.price.toFixed(2)}</td>
+                                      <td className="py-1 px-2 border">
+                                        €{(item.quantity * item.price).toFixed(2)}
+                                      </td>
+                                    </tr>
+                                  ))}
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+                <div className="mt-4">
+                  <a href="/products" className="text-blue-600 hover:underline">
+                    Start Shopping
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
