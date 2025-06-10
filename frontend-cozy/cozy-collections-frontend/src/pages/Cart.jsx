@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
-  clearCart,
+ 
   deleteItemFromCart,
   getUserCart,
   updateQuantity,
 } from "../store/slices/cartSlice";
-import { placeOrder } from "../store/slices/orderSlice";
+
 import ProductImage from "../utils/ProductImage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { userId } = useParams();
@@ -18,13 +18,13 @@ const Cart = () => {
   const cartId = useSelector((state) => state.cart.cartId);
   const isLoading = useSelector((state) => state.cart.isLoading);
   //const { successMessage, errorMessage } = useSelector((state) => state.order);
-
+const navigate = useNavigate();
   useEffect(() => {
     dispatch(getUserCart(userId));
   }, [dispatch, userId]);
 
   const handleIncreaseQuantity = (cartItemId) => {
-    const item = cart.cartItems.find((item) => item.cartItemId === cartItemId);
+    const item = cart.cartItems.find((item) => item.product.id === cartItemId);
     if (item && cartId) {
       dispatch(
         updateQuantity({
@@ -37,7 +37,7 @@ const Cart = () => {
   };
 
   const handleDecreaseQuantity = (cartItemId) => {
-    const item = cart.cartItems.find((item) => item.cartItemId === cartItemId); // DÜZELTİLDİ
+    const item = cart.cartItems.find((item) => item.product.id === cartItemId); 
     if (item && item.quantity > 1) {
       dispatch(
         updateQuantity({
@@ -49,17 +49,19 @@ const Cart = () => {
     }
   };
 
-  const handleDeleteItem = (cartItemId) => {
-    dispatch(deleteItemFromCart({ cartId, cartItemId }));
-    alert("Item removed from the cart");
+  const handleDeleteItem = async (cartItemId) => {
+    try {
+      await dispatch(deleteItemFromCart({ cartId, cartItemId })).unwrap();
+      alert("Item removed from the cart");
+    } catch(error) {
+      alert("Item could not be removed!", error.message);
+    }
   };
 
   const handlePlaceOrder = async () => {
     if (cart.cartItems.length > 0) {
       try {
-        const result = await dispatch(placeOrder(userId)).unwrap();
-        dispatch(clearCart());
-        alert(result.message);
+         navigate(`/checkout/${userId}/checkout`)
       } catch (error) {
         alert(error.message);
       }
@@ -140,7 +142,7 @@ const Cart = () => {
             </h4>
             <div className="space-x-4">
               <Link
-                to="/products"
+                to="/"
                 className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition"
               >
                 Continue Shopping

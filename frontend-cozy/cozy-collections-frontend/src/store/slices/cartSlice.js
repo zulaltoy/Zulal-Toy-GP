@@ -10,10 +10,11 @@ export const addToCart = createAsyncThunk(
     formData.append("quantity", quantity);
     const response = await privateApi.post("/cartItems/cartItem/add", formData);
    
-    return {
-      data: response.data.data,
-      message: response.data.message,
-    };
+    // return {
+    //   data: response.data.data,
+    //   message: response.data.message,
+    // };
+    return response.data;
   }
 );
 export const getUserCart = createAsyncThunk(
@@ -25,11 +26,11 @@ export const getUserCart = createAsyncThunk(
 );
 export const updateQuantity = createAsyncThunk(
   "cart/updateQuantity",
-  async ({ cartId, cartItemId, newQuantity }) => {
+  async ({ cartId, cartItemId, quantity }) => {
     await api.put(
-      `/cartItems/cart/${cartId}/cartItem/${cartItemId}/update?quantity=${newQuantity}`
+      `/cartItems/cart/${cartId}/cartItem/${cartItemId}/update?quantity=${quantity}`
     );
-    return { cartItemId, newQuantity };
+    return { cartItemId, quantity };
   }
 );
 export const deleteItemFromCart = createAsyncThunk(
@@ -83,13 +84,13 @@ const cartSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(updateQuantity.fulfilled, (state, action) => {
-        const { cartItemId, newQuantity } = action.payload;
+        const { cartItemId, quantity } = action.payload;
         const cartItem = state.cartItems.find(
-          (cartItem) => cartItem.cartItemId === cartItemId
+          (cartItem) => cartItem.cartItemId === cartItemId 
         );
         if (cartItem) {
-          cartItem.quantity = newQuantity;
-          cartItem.totalAmount = cartItem.unitPrice * newQuantity;
+          cartItem.quantity = quantity;
+          cartItem.totalAmount = cartItem.unitPrice * quantity;
         }
         state.totalAmount = state.cartItems.reduce(
           (total, cartItem) => total + cartItem.totalAmount,
@@ -99,7 +100,7 @@ const cartSlice = createSlice({
       .addCase(deleteItemFromCart.fulfilled, (state, action) => {
         const cartItemId = action.payload;
         state.cartItems = state.cartItems.filter(
-          (cartItem) => cartItem.cartItemId !== cartItemId
+          (cartItem) => cartItem.cartItemId !== cartItemId 
         );
         state.totalAmount = state.cartItems.reduce(
           (total, cartItem) => total + cartItem.totalAmount,
