@@ -40,10 +40,35 @@ Refresh token & Lange levensduur (bijvoorbeeld 30 dagen), opgeslagen aan de clie
 \caption[Verschillen tussen access en refresh tokens.]{Overzicht van de belangrijkste verschillen tussen access- en refresh tokens.}
 \end{table}
 
-
 \section{Betalingen via Stripe}
 
 Stripe is een populaire betalingsprovider met een sterke focus op developer-vriendelijkheid. De Stripe API ondersteunt onder meer betalingen met kredietkaart, Apple Pay en Google Pay \autocite{StripeDocs2024}. In dit project wordt Stripe gebruikt om veilige en betrouwbare betalingen te integreren.
+
+Onderstaand voorbeeld toont hoe een gebruiker hun kaartgegevens kan invoeren en hoe een betaling wordt bevestigd met behulp van de \texttt{stripe.confirmCardPayment}-functie in de frontend.
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{graphics/codeStripe.eps}
+%   \caption[Stripe-integratie in React Checkout-component]{Voorbeeld van een betaling via Stripe in de \texttt{Checkout.jsx} component.}  \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
+% \end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{graphics/codeStripe.eps}
+%   \caption[Stripe-integratie in React Checkout-component]{\label{fig:stripe-checkout}Voorbeeld van een betaling via Stripe in de \texttt{Checkout.jsx} component.}
+% \end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{graphics/codeStripe.eps}
+  \caption[Stripe-integratie in React Checkout-component]{\label{fig:stripe-checkout}Voorbeeld van een betaling via Stripe in de \texttt{Checkout.jsx} component.}
+\end{figure}
+
+% \label{lst:stripe-checkout}
+
+
+Het volledige formulier gebruikt \texttt{Formik} en \texttt{Yup} voor validatie en beheert kaartinvoer via de \texttt{CardElement}-component van Stripe. Bij succesvolle betaling wordt de bestelling geplaatst en de winkelwagen gewist.
+% \section{Betalingen via Stripe}
+
+% Stripe is een populaire betalingsprovider met een sterke focus op developer-vriendelijkheid. De Stripe API ondersteunt onder meer betalingen met kredietkaart, Apple Pay en Google Pay \autocite{StripeDocs2024}. In dit project wordt Stripe gebruikt om veilige en betrouwbare betalingen te integreren.
 
 % \begin{listing}[h]
 % \begin{verbatim}

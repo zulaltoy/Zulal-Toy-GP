@@ -20,17 +20,17 @@ public class CookieHelper {
             throw new IllegalArgumentException("HttpServletResponse cannot be null");
         }
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setHttpOnly(true); // HttpOnly: JavaScript ile erişilemez, XSS saldırılarına karşı koruma sağlar.
+        refreshTokenCookie.setPath("/");//Bu cookie tüm site yolları için geçerli olur (/ tüm path’ler demektir).
         refreshTokenCookie.setMaxAge((int) (maxAge / 1000));
         refreshTokenCookie.setSecure(useSecureCookie);
-        String sameSite = useSecureCookie ? "None" : "Lax";
-        setResponseHeader(response, refreshTokenCookie, sameSite);
+        String sameSite = useSecureCookie ? "None" : "Lax";  //SameSite tarayıcıların çerezleri 3. parti sitelere gönderip göndermeyeceğini kontrol eder.
+        setResponseHeader(response, refreshTokenCookie, sameSite);// Cookie'yi manuel olarak HTTP header’ına eklemek için yardımcı metoda gönderilir.
     }
 
     private void setResponseHeader(HttpServletResponse response, Cookie refreshTokenCookie, String sameSite) {
-        StringBuilder cookieHeader = new StringBuilder();
-        cookieHeader.append(refreshTokenCookie.getName()).append("=")
+        StringBuilder cookieHeader = new StringBuilder();  // Cookie header’ı yazmak için StringBuilder başlatılır.
+        cookieHeader.append(refreshTokenCookie.getName()).append("=")  // Cookie başlığı manuel olarak hazırlanır:
                 .append(refreshTokenCookie.getValue())
                 .append("; HttpOnly; Path=").append(refreshTokenCookie.getPath())
                 .append("; Max-Age=").append(refreshTokenCookie.getMaxAge())
