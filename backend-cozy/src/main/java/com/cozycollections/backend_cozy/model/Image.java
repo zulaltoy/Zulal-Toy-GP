@@ -21,12 +21,12 @@ public class Image {
     private String fileName;
     private String fileType;
 
-    @Lob
+    @Lob // Large Object: Veritabanında büyük veri olarak saklanır
     private Blob image;
 
     private String downloadUrl;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id")// Bu alan `product_id` sütununu oluşturur (foreign key)
     private Product product;
 }

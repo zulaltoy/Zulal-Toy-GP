@@ -84,7 +84,7 @@ public class UserService implements IUserService {
 
     @Override
     public User getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); //Giriş yapan kullanıcıyı güvenlik bağlamından (SecurityContext) alır.
         String email = authentication.getName();
 
         return Optional.ofNullable(userRepository.findByEmail(email))

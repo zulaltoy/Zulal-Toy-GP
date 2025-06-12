@@ -18,8 +18,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ImageService implements IImageService {
-    private final ImageRepository imageRepository;
-    private final ProductService productService;
+    private final ImageRepository imageRepository; // Veritabanı işlemleri için
+    private final ProductService productService; // Ürün bilgisi çekmek için
 
     @Override
     public Image getImageById(Long id) {
