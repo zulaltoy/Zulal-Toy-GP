@@ -24,26 +24,30 @@ public class ImageController {
 
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> uploadImage(@RequestParam("files") List<MultipartFile> files,
-                                                   @RequestParam("productId") Long productId) {
-        List<ImageDto> imageDto = imageService.saveImages(productId,files);
+            @RequestParam("productId") Long productId) {
+        List<ImageDto> imageDto = imageService.saveImages(productId, files);
         return ResponseEntity.ok(new ApiResponse("Images uploaded successfully!", imageDto));
     }
 
-    @GetMapping("/image/download/{imageId}") //Kullanıcı imageId'si ile resmi indirmek istediğinde bu çalışır.
+    @GetMapping("/image/download/{imageId}") // Kullanıcı imageId'si ile resmi indirmek istediğinde bu çalışır.
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
 
-        ByteArrayResource resource = new ByteArrayResource(image.getImage()
-                .getBytes(1, (int) image.getImage().length()));  //Resmi byte olarak verir, indirme başlatılır.
+        ByteArrayResource resource = new ByteArrayResource(image.getImage() // ByteArrayResource ile HTTP yanıtında
+                                                                            // dosya olarak gönderilmeye hazır hale
+                                                                            // getirilir.
+                .getBytes(1, (int) image.getImage().length())); // Resmi byte olarak verir, indirme başlatılır.
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(image.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
-                        + image.getFileName() + "\"").body(resource);
+                        + image.getFileName() + "\"")
+                .body(resource);
     }
+
     @PutMapping("/image/{imageId}/update")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file) {
-        imageService.updateImage(file,imageId);
+        imageService.updateImage(file, imageId);
         return ResponseEntity.ok(new ApiResponse("Image updated!", null));
     }
 
